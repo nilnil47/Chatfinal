@@ -1,0 +1,357 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+
+:root {
+  --dark-color-a: #e63333;
+  --dark-color-b: #ec2758;
+  --dark-color-c: #070607;
+  --light-color: #f11e4c;
+  --success-color: #5cb85c;
+  --error-color: #d9534f;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  /* background: var(--light-color); */
+  background: radial-gradient(50% 50% at 50% 50%, hsla(0, 0%, 100%, 0.973) 0%, #72d4f1dc 100%);
+  margin: 0px;
+}
+body,
+html {
+  height: 100%;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.btn {
+  cursor: pointer;
+  padding: 5px 15px;
+  background: var(--light-color);
+  color: var(--dark-color-a);
+  border: 0;
+  font-size: 17px;
+}
+
+/* Chat Page */
+
+.chat-container {
+  /* max-width: 1100px; */
+  width: 100%;
+  background: #fff;
+  /* margin: 30px auto; */
+  margin: 0 auto;
+  overflow: hidden;
+  transform: translateY(-50%);
+  top: 50%;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+.chat-header {
+  background: #616161;
+  color: #fff;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-main {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  height: 100%;
+}
+
+.chat-sidebar {
+  background: #eb6767;
+  color: #fff;
+  padding: 20px 20px 60px;
+  overflow-y: scroll;
+}
+
+.chat-sidebar h2 {
+  font-size: 20px;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.chat-sidebar h3 {
+  margin-bottom: 15px;
+}
+
+.chat-sidebar ul li {
+  padding: 10px 0;
+}
+
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+
+.relative {
+  position: relative;
+}
+
+.rounded {
+  border-radius: 200px;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.fa-paper-plane {
+  color: white;
+}
+
+.btn_leave {
+  color: #eb6767;
+  background: white;
+  border: 1px solid#eb6767;
+  border-radius: 20px;
+  padding: 0.5rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.btn_leave:hover {
+  background: #e3e3e3;
+  box-shadow: 0 0 8px rgba(102, 49, 255, 0.2);
+}
+.chat-messages {
+  padding: 30px;
+  height: 100%;
+  max-height: 82vh;
+
+  overflow-y: scroll;
+}
+
+.chat-messages .message {
+  padding: 10px;
+  margin-bottom: 15px;
+  background: white;
+  box-shadow: 0 0 8px rgb(0 0 0 / 20%);
+
+  border-radius: 5px;
+}
+
+.chat-messages .message .meta {
+  font-size: 15px;
+  font-weight: bold;
+  color: var(--dark-color-b);
+  opacity: 0.7;
+  margin-bottom: 7px;
+}
+
+.chat-messages .message .meta span {
+  color: #777;
+}
+
+.chat-form-container {
+  padding: 1rem;
+  background: white;
+  border-top: 1px solid #c1c1c1;
+  position: absolute;
+  /* background-color: var(--dark-color-a); */
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /* background-color: var(--dark-color-a); */
+}
+
+.send_btn {
+  background: #eb6767;
+  color: white;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  padding: 5px 15px;
+  font-size: 17px;
+}
+.send_btn:hover {
+  background: #eb6767;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+.chat-form-container form {
+  display: flex;
+}
+
+.chat-form-container input[type="text"] {
+  font-size: 16px;
+  padding: 5px;
+  flex: 1;
+  border: 0;
+  outline: none;
+}
+
+/* Join Page */
+.join-container {
+  max-width: 500px;
+  margin: 0px auto;
+  color: #fff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.join-header {
+  text-align: center;
+  padding: 12px;
+  /* background: var(--dark-color-a); */
+
+  background: radial-gradient(50% 50% at 50% 50%, #0e0000 0%, #000000 100%); /* for titles*/
+  border-top-left-radius: 30px;
+  border-top-right-radius: 35px;
+}
+
+.join-main {
+  padding: 30px 40px;
+  border-radius: 0 0 5px 5px;
+  background: white;
+  /* background: radial-gradient(50% 50% at 50% 50%, #8256ff 0%, #6631ff 100%); */
+  /* background: linear-gradient(var(--dark-color-b), var(--dark-color-c)); */
+  /* background: var(--dark-color-b); */
+}
+
+.join-main p {
+  /* margin-bottom: 200px; */
+}
+
+.join-main .form-control {
+  margin-bottom: 20px;
+}
+
+.join-main label {
+  display: block;
+  margin-bottom: 5px;
+  color: #4f4f4f;
+}
+
+.join-main input[type="text"] {
+  font-size: 16px;
+  padding: 5px;
+  height: 40px;
+  width: 100%;
+  outline: none;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+.join-main input[type="text"]:focus {
+  outline: #eb6767 1px solid;
+}
+
+.text_strong {
+  font-weight: 100;
+  color: #000000;
+  font-size: 18px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.signin {
+  font-weight: 100;
+  color: #4f4f4f;
+  width: 100%;
+  text-align: center;
+  margin-top: 1rem;
+}
+.link {
+  color: #4f4f4f;
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+.bottom_part {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  border-top: 1px solid #e8e8e8;
+  padding: 2rem 0;
+}
+.join-main select {
+  font-size: 16px;
+  padding: 5px;
+  height: 40px;
+  width: 100%;
+}
+
+.join-main .btn {
+  background: #ee3c3c;
+  color: white;
+  border-radius: 20px;
+  padding: 0.5rem;
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+}
+.btn:hover {
+  background: #ee3c3c;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn_secondary {
+  color: #ee3c3c;
+  background: white;
+  border: 1px solid #ee3c3c;
+  border-radius: 20px;
+  padding: 0.5rem;
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.btn_secondary:hover {
+  box-shadow: 0 0 8px rgba(102, 49, 255, 0.2);
+}
+
+@media (max-width: 700px) {
+  .chat-main {
+    display: block;
+  }
+
+  .chat-sidebar {
+    display: none;
+  }
+}
+  .button {
+    background-color: #ee3c3c;
+    border: none;
+    color: white;
+    padding: 50px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    width: 250px !important;
+   
+  }
+  
+  .button1 {border-radius: 2px;}
+  .button2 {border-radius: 4px;}
+  .button3 {border-radius: 8px;}
+  .button4 {border-radius: 12px;}
+  .button5 {border-radius: 50%;}
+
