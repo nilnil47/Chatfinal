@@ -9,6 +9,7 @@ const userList= document.getElementById('users');
 var url = new URL(window.location.href);
 var negoid = url.searchParams.get("negoid");
 var userId=localStorage.getItem('id')
+
 console.log({negoid,userId});
 
 //Get usrname and room from url to know which in those room
