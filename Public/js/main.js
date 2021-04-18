@@ -7,15 +7,13 @@ const userList= document.getElementById('users');
 
 
 var url = new URL(window.location.href);
-var negoid = url.searchParams.get("negoid");
-var userId=localStorage.getItem('id')
+var negoid = url.searchParams.get("title");
+var usernamee=localStorage.getItem('username');
 
-console.log({negoid,userId});
 
 //Get usrname and room from url to know which in those room
-const {username,room}=Qs.parse(location.search, {
-    ignoreQueryPrefix: true
-});
+const username=usernamee;
+const room=negoid;
 
 //console.log(username,room); #check that it works
 

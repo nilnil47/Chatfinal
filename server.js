@@ -129,7 +129,7 @@ router.post("/login", (req, res) => {
     var username=req.body.userName;
     var password=req.body.password;
 
-    connection.query('SELECT userType FROM user WHERE userCode = ? AND password = ? ', [username,password], async function (error, results, fields) {
+    connection.query('SELECT userType FROM user WHERE username = ? AND password = ? ', [username,password], async function (error, results, fields) {
     if (error) {
       console.log("not register");
       res.send("no");

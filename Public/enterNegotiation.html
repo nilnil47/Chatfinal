@@ -24,14 +24,34 @@
         width="80" height="90" alt="webmaster logo" /></i>Choose your negotiation </h1>
       </header>
 
-      <table>
-        <tr>
-        <th>ID negotiation</th>
-        <th>Title negotiation</th>
-       
-        </tr>
+
+      <style>
+        /* When it is unvisited link */
+        a:link {
+        color: yellow;
+        }
+        
+        /* When it is visited link */
+        a:visited {
+        color: yellow;
+        }
+        
+        /* When you mouse over link */
+        a:hover {
+        color: red;
+        }
+        
+        /* When it is selected link */
+        a:active {
+        color: blue;
+        }
+        </style>
+        </head>
+
+      
+        
      
-        <tbody id="data"></tbody>
+       <center> <h1 id="data" style="background-color: burlywood;"></center>
       
 
         <script>
@@ -41,8 +61,9 @@
           xhr.send();
           xhr.onreadystatechange=function(){
             if(this.readyState == 4 && this.status==200){
-              const {negoid,title}=JSON.parse(this.responseText)[0]
-              console.log(this.responseText)
+              console.log(JSON.parse(this.responseText));
+              const negoid= new Array (JSON.parse(this.responseText)[0])
+              const {title}=JSON.parse(this.responseText)[0];
               var strHtml=`<a href=./chat.html?negoid=${negoid}&title=${title}>${title}</a>`
               document.getElementById("data").innerHTML=strHtml;
             }
@@ -51,12 +72,8 @@
         </script>
     
 
-  </table>
-
     
   
-            <button type="submit" class="btn">Submit</button>
-          </a>
         </div>
       </main>
     </div>
