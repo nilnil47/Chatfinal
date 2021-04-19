@@ -61,15 +61,26 @@
           xhr.send();
           xhr.onreadystatechange=function(){
             if(this.readyState == 4 && this.status==200){
-              console.log(JSON.parse(this.responseText));
-              const negoid= new Array (JSON.parse(this.responseText)[0])
-              const {title}=JSON.parse(this.responseText)[0];
+              var i=0;
+              var array=[];
+              var myarray=((JSON.parse(this.responseText)));
+              console.log(myarray);
+              
+              
+              while(i<myarray.length){
+              
+             console.log(myarray[i].title);
+              i++;
+              
+              }
+              const {negoid,title}=myarray[0];
               var strHtml=`<a href=./chat.html?negoid=${negoid}&title=${title}>${title}</a>`
               document.getElementById("data").innerHTML=strHtml;
             }
           };
           xhr.setRequestHeader('Content-Type', 'application/json');
         </script>
+        
     
 
     

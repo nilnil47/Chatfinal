@@ -24,6 +24,7 @@
             firstName:document.getElementById("firstname").value,
             lastName:document.getElementById("lastname").value,
             email:document.getElementById("email").value,
+            username:document.getElementById("username").value,
             phone:document.getElementById("Phone").value,
             userType:"negotiator",
             password:document.getElementById("password").value
@@ -78,6 +79,16 @@
             name="email"
             id="email"
             placeholder="Enter your email..."
+            required
+          />
+        </div>
+        <div class="form-control">
+          <label for="email">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Enter your username..."
             required
           />
         </div>

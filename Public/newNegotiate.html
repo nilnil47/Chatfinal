@@ -14,6 +14,31 @@
     <link rel="stylesheet" href="css/style.css" />
     <title>New Negotiation</title>
   </head>
+
+  <script>
+    function submit(){
+      const yourUrl = 'http://localhost:3000/api/newnegotiation'
+      const object = {
+        name1:localStorage.getItem('username'),
+        title:document.getElementById("title").value,
+        phone_user2:document.getElementById("phone").value,
+        description:document.getElementById("description").value
+     
+
+
+      }
+
+     
+
+      console.log(object);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", yourUrl, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify(object));
+      alert("The request has been sent");
+
+    }
+    </script>
   <body>
     <div style="display: flex; justify-content: center">
       
@@ -48,7 +73,7 @@
             />
           </div>
           <div class="form-control">
-          <textarea placeholder="Enter negotiation description..." rows="8" cols="57" class="join-container" title="description"  id="options_8_text" name="options[8]"></textarea>
+          <textarea placeholder="Enter negotiation description..." rows="8" cols="57" class="join-container" title="description"  id="description" name="options[8]"></textarea>
         </div>
         <div class="form-control ">
           <form action="/action_page.php">
@@ -56,8 +81,8 @@
               <input type="submit">
             </form>
         </div>
-  
-            <button type="submit" class="btn">Create negotiation</button>
+        <button type="submit" onclick="submit()" class="btn">Create negotiation</button></a>
+
          
         </div>
       </main>

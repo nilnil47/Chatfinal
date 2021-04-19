@@ -46,15 +46,15 @@ router.get("/users", (req, res) => {
 });
 
 router.post("/usersnego", (req, res) => {
-    connection.query(`INSERT INTO user (firstName,lastName,email,phone,userType,password) VALUES
- ('${req.body.firstName}','${req.body.lastName}','${req.body.email}','${req.body.phone}','${req.body.userType}','${req.body.password}')`,function(error,result){});
+    connection.query(`INSERT INTO user (firstName,lastName,email,username,phone,userType,password) VALUES
+ ('${req.body.firstName}','${req.body.lastName}','${req.body.email}','${req.body.username}','${req.body.phone}','${req.body.userType}','${req.body.password}')`,function(error,result){});
 
   res.send("hello world Post method");
 });
   
 router.post("/usersmedi", (req, res) => {
-    connection.query(`INSERT INTO user (firstName,lastName,email,phone,education,userType,password,proffesionalExperience) VALUES
- ('${req.body.firstName}','${req.body.lastName}','${req.body.email}','${req.body.phone}','${req.body.education}','${req.body.userType}','${req.body.password}','${req.body.proffesionalExperience}')`,function(error,result){});
+    connection.query(`INSERT INTO user (firstName,lastName,email,username,phone,education,userType,password,proffesionalExperience) VALUES
+ ('${req.body.firstName}','${req.body.lastName}','${req.body.email}','${req.body.username}','${req.body.phone}','${req.body.education}','${req.body.userType}','${req.body.password}','${req.body.proffesionalExperience}')`,function(error,result){});
 });
 
 router.post("/resetpass", (req, res) => {
@@ -98,29 +98,30 @@ router.post("/sendEmail", (req, res) => {
     });
 
 
-router.post("/resetpass", (req, res) => {
+router.post("/resetpassword", (req, res) => {
     console.log(req.body);
-            var transporter = nodemailer.createTransport({
-                service: 'gmail',
-                auth: {
-                  user: 'negoflict255@gmail.com',
-                  pass: 'barkonyo1'
-                }
-              });
-              
-              var mailOptions = {
-                from: 'negoflict255@gmail.com',
-                to: `${req.body.email}`,
-                subject: 'Reset your password in NegoFlict web',
-                text: 'for reset your password click the next link http://localhost:3000/newpassword.html'
-              };
-              
-            transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
-                console.log(error);
-                } else {
-                console.log('Email sent: ' + info.response);
-                }
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'negoflict255@gmail.com',
+        pass: 'barkonyo1'
+      }
+    });
+    
+    var mailOptions = {
+      from: 'negoflict255@gmail.com',
+      to: `${req.body.email}`,
+      subject: 'Reset your password in NegoFlict web',
+      text:'for reset your password click the next link http://localhost:3000/newpassword.html'
+    };
+    
+  transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+      console.log(error);
+      } else {
+      console.log('Email sent: ' + info.response);
+      }
+            
       });
         });
      
@@ -153,6 +154,50 @@ router.post("/login", (req, res) => {
           
     });
 
+
+      router.post("/newnegotiation", (req, res) => {
+        var id1,id2;
+        connection.query('SELECT userCode FROM user WHERE username = ?', [req.body.name1], async function (error, results, fields) {
+          if (error) {
+            console.log("not ");
+            res.send("no");
+      
+          }else{
+            if(results.length >0){
+                id1=((JSON.parse(JSON.stringify(results))[0]));
+                id1=id1.userCode;
+              
+            }
+            else {
+                res.send("no");
+                console.log("not register");
+                
+            }
+           
+          }
+         
+      connection.query('SELECT userCode FROM user WHERE phone = ?', [req.body.phone_user2], async function (error, results, fields) {
+        if (error) {
+          console.log("not ");
+          res.send("no");
+    
+        }else{
+          if(results.length >0){
+              id2=((JSON.parse(JSON.stringify(results))[0]));
+             id2=id2.userCode;
+            
+          }
+          else {
+              res.send("no");
+              console.log("not register");
+              
+          }
+        }
+       
+        connection.query(`INSERT INTO negotiation (usercode1,usercode2,title,description) VALUES
+        ('${id1}','${id2}','${req.body.title}','${req.body.description}')`,function(error,result){});
+            }); }); });
+    
     
 
 
