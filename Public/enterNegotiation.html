@@ -28,12 +28,12 @@
       <style>
         /* When it is unvisited link */
         a:link {
-        color: yellow;
+        color: rgb(0, 0, 0);
         }
         
         /* When it is visited link */
         a:visited {
-        color: yellow;
+        color: rgb(0, 0, 0);
         }
         
         /* When you mouse over link */
@@ -51,7 +51,7 @@
       
         
      
-       <center> <h1 id="data" style="background-color: burlywood;"></center>
+       <center> <h1 id="data" style="background-color: rgb(255, 255, 255);"></center>
       
 
         <script>
@@ -61,23 +61,19 @@
           xhr.send();
           xhr.onreadystatechange=function(){
             if(this.readyState == 4 && this.status==200){
-              var i=0;
-              var array=[];
+              var strHtml='';
               var myarray=((JSON.parse(this.responseText)));
-              console.log(myarray);
-              
-              
-              while(i<myarray.length){
-              
-             console.log(myarray[i].title);
-              i++;
-              
+              myarray.forEach(obj=>{
+              const {negoid,title}=obj;
+              console.log(title);
+              strHtml += `<div><div><a href=./chat.html?negoid=${negoid}&title=${title}>${title}</a></div></div>`});
+              //console.log(title);
               }
-              const {negoid,title}=myarray[0];
-              var strHtml=`<a href=./chat.html?negoid=${negoid}&title=${title}>${title}</a>`
+              console.log(strHtml);
+            
+            
               document.getElementById("data").innerHTML=strHtml;
-            }
-          };
+            };
           xhr.setRequestHeader('Content-Type', 'application/json');
         </script>
         
