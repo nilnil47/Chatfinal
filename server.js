@@ -65,7 +65,9 @@ router.post("/resetpass", (req, res) => {
 });
 
 
-router.get("/viewnegos", (req, res) => {
+router.get("/viewnegos/:username", (req, res) => {
+     const username=req.query.username;
+     console.log(username);
     connection.query(`SELECT negoid, title FROM negotiation WHERE mediatoerCode=? OR userCode1=? OR userCode2=? `,["2","2","2"]
     ,function(err, result, fields){
         if(err) throw err;
