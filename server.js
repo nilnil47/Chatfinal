@@ -1,5 +1,6 @@
-const path= require('path')
+const path= require('path');
 const http=require('http');
+const url= require('url');
 const express= require('express');
 const socketio=require('socket.io');
 var nodemailer= require('nodemailer');
@@ -24,6 +25,7 @@ app.use(cookieParse());
 // use mysql
 var mysql=require("mysql");
 const { response, json } = require('express');
+const { hostname } = require('os');
 //create connection
 var connection=mysql.createConnection({
     host:"localhost",
@@ -59,12 +61,13 @@ router.post("/usersmedi", (req, res) => {
 
 router.post("/resetpass", (req, res) => {
   connection.query(`UPDATE user SET password=
-('${req.body.password}') WHERE userCode=?`,[req.body.userid],function(error,result){});
+('${req.body.password}') WHERE username=?`,[req.body.username],function(error,result){});
 });
 
 
 router.get("/viewnegos", (req, res) => {
-    connection.query(`SELECT negoid, title FROM negotiation`,function(err, result, fields){
+    connection.query(`SELECT negoid, title FROM negotiation WHERE mediatoerCode=? OR userCode1=? OR userCode2=? `,["2","2","2"]
+    ,function(err, result, fields){
         if(err) throw err;
         res.send(result);
     }) 
@@ -85,7 +88,7 @@ router.post("/sendEmail", (req, res) => {
             from: 'negoflict255@gmail.com',
             to: 'negoflict255@gmail.com',
             subject: `${req.body.subject}`,
-            text: `'This is mail from the web, the mail was sent by  ${req.body.firstname} ${req.body.lastName}. phone: ${req.body.phone}. The contect is ${req.body.description}`
+            text: `'This is mail from the web. The mail was sent by ${req.body.firstname} ${req.body.lastName}. phone: ${req.body.phone}. Message content: ${req.body.description}`
           };
           
         transporter.sendMail(mailOptions, function(error, info){
@@ -210,7 +213,7 @@ router.post("/login", (req, res) => {
             socket.join(user.room);
     
             //welcome current user
-            socket.emit('message',formatMessage(botName,'welcome to NegoFlict!')); //for personal
+            socket.emit('message',formatMessage(botName,'Welcome to NegoFlict!')); //for personal
     
         //Broadcast when a user connects
             socket.broadcast.to(user.room).emit('message', formatMessage(botName,`${user.username} has joined the chat`));//for everyone

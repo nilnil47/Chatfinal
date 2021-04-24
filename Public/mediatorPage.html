@@ -26,9 +26,18 @@
       <main class="join-main">
           <div class="form-control">
             <center>
-              <a href="enterNegotiation.html">
+              <script>
+                function enternegotiatons(){
+                  window.location.href=`./enterNegotiation.html?username=?`+localStorage.getItem('username');
+                      
+                }
+                </script>
 
-            <button class="button button5">Continue negotiation</button></a>
+
+              <button class="button button5" onclick="enternegotiatons()" >Continue negotiation</button>
+
+
+            
             <br>
             <br>
             <br>

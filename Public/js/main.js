@@ -6,7 +6,7 @@ const roomName= document.getElementById('room-name');
 const userList= document.getElementById('users');
 
 
-var url = new URL(window.location.href);
+var url =window.location.search;
 var negoid = url.searchParams.get("title");
 var usernamee=localStorage.getItem('username');
 
