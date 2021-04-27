@@ -54,8 +54,13 @@
               alert("Welcome") ;
               window.location.href="negotiatorPage.html";            
             }
+            else if(xhr.responseText==='{"userType":"manager"}')
+            {
+              alert("Welcome") ;
+              window.location.href="managerPage.html";            
+            }
             else if(xhr.responseText==="no"){
-              alert("no the right details");
+              alert("Wrong password, try again");
             }
           }
             

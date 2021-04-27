@@ -12,79 +12,70 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="css/style.css" />
-    <title>Enter Negotiation</title>
+    <title>Approve Mediator</title>
   </head>
-  <body>
-    <div style="display: flex; justify-content: center">
+  <body >
+    <div  style="display: flex; justify-content: center ">
       
     </div>
     <div class="join-container">
       <header class="join-header">
         <h1 ><i><img src="https://scontent.ftlv6-1.fna.fbcdn.net/v/t1.6435-9/155379338_3912200072134580_7295162422057122146_n.jpg?_nc_cat=102&_nc_map=test-rt&ccb=1-3&_nc_sid=730e14&_nc_ohc=eN3je32BSmsAX8lpCam&_nc_ht=scontent.ftlv6-1.fna&oh=08864d6dc8d5c31140ef81f72874d587&oe=609B5173" 
-        width="80" height="90" alt="webmaster logo" /></i>Choose your negotiation </h1>
+        width="80" height="90" alt="webmaster logo" /></i>Approve Mediator</h1>
       </header>
-
-
-      <style>
-        /* When it is unvisited link */
-        a:link {
-        color: rgb(0, 0, 0);
-        }
-        
-        /* When it is visited link */
-        a:visited {
-        color: rgb(0, 0, 0);
-        }
-        
-        /* When you mouse over link */
-        a:hover {
-        color: red;
-        }
-        
-        /* When it is selected link */
-        a:active {
-        color: blue;
-        }
-        </style>
-        </head>
-
+      <center>
+         <h1 id="data"  style="background-color: rgb(255, 255, 255); color: #000;"></center>
       
-        
-     
-       <center> <h1 id="data" style="background-color: rgb(255, 255, 255);"></center>
-      
-
-        <script>
+      <script>
           
-        const username = localStorage.getItem("username");
 
-        const yourUrl = "http://localhost:3000/api/viewnegos/" + username;
+        const yourUrl = "http://localhost:3000/api/unapprovedMed";
         fetch(yourUrl)
           .then(res=>res.json())
           .then((res) => {
             var strHtml = "";
             var myarray = res;
-            console.log("🚀 ~ file: enterNegotiation.html ~ line 65 ~ fetch ~ myarray", myarray)
             myarray.forEach((obj) => {
-            let { negoid, title } = obj;
-            console.log(title);
-   
+            let { firstName, lastName,username, education, proffesionalExperience } = obj;
+            var name=obj.username;
             strHtml += /*html*/`<div>
+              
                 <div>
-                  <a href=./chat.html?negoid=${negoid}&title=${escape(title)}>${title}</a>
+                  <h4>${firstName}        ${lastName} ${username} ${education}   ${proffesionalExperience}</h4>  
+                  <center><button type="submit" class="btn" style="color:white" onclick="approvenMed('${name}');">Approve</button></center>
+                
+
+
+                 
                 </div>
+                
               </div>`;
             });
 
-            console.log(strHtml);
+            //console.log(strHtml);
             document.getElementById("data").innerHTML = strHtml;
           });
-        </script>
-        
-    
 
-    
-  
+
+          function approvenMed(name){
+          const yourUrl = 'http://localhost:3000/api/approvenMed'
+          const object = {
+            username:name
+          }
+          console.log(object.username);
+
+
+       
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", yourUrl, true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.send(JSON.stringify(object));
+      
+        } 
+        </script>
+
+
+          </a>
         </div>
       </main>
     </div>

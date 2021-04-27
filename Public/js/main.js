@@ -6,8 +6,15 @@ const roomName= document.getElementById('room-name');
 const userList= document.getElementById('users');
 
 
-var url =window.location.search;
-var negoid = url.searchParams.get("title");
+
+// Retrieve params via url.search, passed into ctor
+var url = new URL(window.location.href);
+// console.log("🚀 ~ file: main.js ~ line 39 ~ window.location.href", window.location.href)
+var params = new URLSearchParams(url.search);
+// console.log("🚀 ~ file: main.js ~ line 13 ~ params", params.get('title'),params.get('negoid'))
+
+
+var negoid = params.get('title');
 var usernamee=localStorage.getItem('username');
 
 

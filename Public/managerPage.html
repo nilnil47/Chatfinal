@@ -25,19 +25,51 @@
       </header>
       <main class="join-main">
           <div class="form-control">
-            <center><button class="button button5">Approve negotiation</button>
+            <center>
+              <script>
+                function approveNegotiation(){
+                  window.location.href="approveNegotiation.html";
+                      
+                }
+              </script>
+            <center>
+              <script>
+                function approveMediator(){
+                  window.location.href="approveMediator.html";
+                      
+                }
+                </script>
+            </center>
+            </center>
+            <center>
+                <script>
+                  function viewsystemrepotrs(){
+                    window.location.href="viewSystemReports.html";
+                        
+                  }
+                  </script></center>
+                  <center>
+                    <script>
+                      function writesystem(){
+                        window.location.href="writeSystemNotifications.html";
+                            
+                      }
+                      </script></center>
+
+            <center><button class="button button5" onclick="approveNegotiation()"   >Approve Negotiation </button>
               <br>
               <br>
               <br>
-              <button class="button button5">Approve<br> mediator</button>
+              <button class="button button5" onclick="approveMediator()"   >Approve Mediator</button>
               <br>
               <br>
               <br>
-              <button class="button button5">View system reports</button>
+              
+              <button class="button button5" onclick="viewsystemrepotrs()">View System Reports</button>
               <br>
-            <br>
-            <br>
-            <button class="button button5">Write system notifications</button>
+              <br>
+              <br>
+              <button class="button button5" onclick="writesystem()">Write System Notifications</button>
           
 
 

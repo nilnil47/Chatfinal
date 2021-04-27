@@ -28,6 +28,7 @@
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify(object));
         alert("Your request has been sent ");
+        window.location.href="index.html"
       }
       </script>
 
@@ -87,7 +88,7 @@
     
     <div class="input-box padding_hf">
     
-    <input placeholder="Enter phone..." type="text" class="input-text  validate-phoneStrict" "="" title="phone" id="phone" name="options[5]" value="">
+    <input placeholder="Enter phone..." type="text" class="input-text  validate-phoneStrict" title="phone" id="phone" name="options[5]" value="">
        
     </div>
 
@@ -121,8 +122,8 @@
     
     <div class="input-box padding_hf">
         
-    <textarea placeholder="Enter your description..." style=color:black rows="8" cols="57" class="join-container" title="description"  id="description" name="description style=background-color:black></textarea>
-    <div class="buttons-set padding_hf left"> <br><br>
+    <textarea placeholder="Enter your description..." style=color:black rows="8" cols="57" class="join-container" title="description"  id="description" name=description></textarea>
+     <div class="buttons-set padding_hf"> <br><br>
                     
         <input type="hidden" name="form_id" id="form_id" value="1">
        
@@ -130,7 +131,7 @@
         <button type="submit" onclick="sendEmail()" class="btn">send</button>
     
     </div>
-    </div>    
+        
     </li>
                             
 </div>             </ul>

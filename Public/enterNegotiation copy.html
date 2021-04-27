@@ -56,29 +56,30 @@
 
         <script>
           
-        const username = localStorage.getItem("username");
+          const userId = localStorage.getItem('id')
+     
+            console.log(userId)
+          const yourUrl = 'http://localhost:3000/api/viewnegos/'+userId;
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", yourUrl, true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.send(JSON.stringify(userId));
+          xhr.onreadystatechange=function(){
+            if(this.readyState == 4 && this.status==200){
+              var strHtml='';
+              var myarray=((JSON.parse(this.responseText)));
+              myarray.forEach(obj=>{
+              const {negoid,title}=obj;
+              console.log(title);
+              strHtml += `<div><div><a href=./chat.html?negoid=${negoid}&title=${title}>${title}</a></div></div>`});
+              //console.log(title);
+              }
+              console.log(strHtml);
+            
+            
+              document.getElementById("data").innerHTML=strHtml;
+            };
 
-        const yourUrl = "http://localhost:3000/api/viewnegos/" + username;
-        fetch(yourUrl)
-          .then(res=>res.json())
-          .then((res) => {
-            var strHtml = "";
-            var myarray = res;
-            console.log("🚀 ~ file: enterNegotiation.html ~ line 65 ~ fetch ~ myarray", myarray)
-            myarray.forEach((obj) => {
-            let { negoid, title } = obj;
-            console.log(title);
-   
-            strHtml += /*html*/`<div>
-                <div>
-                  <a href=./chat.html?negoid=${negoid}&title=${escape(title)}>${title}</a>
-                </div>
-              </div>`;
-            });
-
-            console.log(strHtml);
-            document.getElementById("data").innerHTML = strHtml;
-          });
         </script>
         
     
