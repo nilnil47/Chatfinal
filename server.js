@@ -198,7 +198,7 @@ router.get("/viewnegitaion", (req, res) => {
   
     connection.query(`SELECT title, description FROM negotiation WHERE mediatoerCode=?`,[100],
     function(error,result){
-        console.log(JSON.stringify(result));
+        //console.log(JSON.stringify(result));
 
         res.send(result);
         });
@@ -210,7 +210,7 @@ router.get("/approvedMed", (req, res) => {
     var k= 'mediator';   
     connection.query(`SELECT username FROM user WHERE approved=? AND userType=?`,[num,k],
     function(error,result){
-        console.log(JSON.stringify(result));
+        //console.log(JSON.stringify(result));
         res.send(result);
         });
     

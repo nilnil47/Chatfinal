@@ -25,10 +25,23 @@
       </header>
       <h1 id="data"  style="background-color: rgb(255, 255, 255); color: #000;"></center>
 
-
+ 
 
       <script>
-          
+          const url1="http://localhost:3000/api/approvedMed"
+          var arr = [] ;
+            fetch(url1)
+          .then(res=>res.json())
+          .then((res) => {
+            var strHtml = "";
+            var myarray = res;
+            let arr1 = myarray.map(function(element){return element.username;});
+            arr.push(arr1);
+        });
+
+console.log(arr);
+
+
 
         const yourUrl = "http://localhost:3000/api/viewnegitaion";
         fetch(yourUrl)
@@ -38,16 +51,39 @@
             var myarray = res;
             myarray.forEach((obj) => {
             let { title, description } = obj;
-   
+           // <label for="mediator">Assign a mediator:</label>
+            
+            /*
+
+            var select = document.getElementById('name');
+            arr.foreach((value) => {select.add(new Option(value))}
+            ) 
+            <select id="name"> </select>
+
+
+            arr.map(o => <option key={o.username}>{o.username}</option>);
+
+
+
+            function GFG_Fun() {
+            $.each(arr, function(i, p) {
+                $('#arr').append($('<option></option>')
+                            .val(p).html(p));
+            });
+
+        console.log(arr);
+        <button onclick="GFG_Fun();">
+        </button>
+        */
+            
             strHtml += /*html*/`<div>
+
                 <div>
                   <h4>${title},    ${description}    </h4>
-                 <label for="mediator">Assign a mediator:</label>
-                <select id="cars">
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                  <option value="opel">Opel</option>
-                  <option value="audi">Audi</option>
+                  
+                <select id="mediators">
+                  
+                
                 </select>
                 </div>
               </div>`;
