@@ -50,36 +50,60 @@
 
       
         
-     
+        <script>
+          function sendEmail(){
+            src="https://smtpjs.com/v3/smtp.js"
+            const yourUrl = 'http://localhost:3000/api/notification'
+            const object = { //put here relavent
+              username:document.getElementById("username").value,
+              notification:document.getElementById("notification").value
+            }
+    
+    
+            console.log(object);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", yourUrl, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(object));
+            alert("Your notification has been sent ");
+            window.location.href="managerPage.html"
+          }
+          </script>
+
+
        <center> <h1 id="data" style="background-color: rgb(255, 255, 255);"></center>
       
 
-        <script>
-          
-        const username = localStorage.getItem("username");
-
-        const yourUrl = "http://localhost:3000/api/viewnegos/" + username;
-        fetch(yourUrl)
-          .then(res=>res.json())
-          .then((res) => {
-            var strHtml = "";
-            var myarray = res;
-            console.log("🚀 ~ file: enterNegotiation.html ~ line 65 ~ fetch ~ myarray", myarray)
-            myarray.forEach((obj) => {
-            let { negoid, title } = obj;
-            console.log(title);
-   
-            strHtml += /*html*/`<div>
-                <div>
-                  <a href=./chat.html?negoid=${negoid}&title=${escape(title)}>${title}</a>
-                </div>
-              </div>`;
-            });
-
-            console.log(strHtml);
-            document.getElementById("data").innerHTML = strHtml;
-          });
-        </script>
+        
+      <main class="join-main">
+        <div class="form-control">
+     
+  
+  
+  </li>
+  <li>
+  
+  <div class="input-box padding_hf">
+  
+  <input placeholder="Enter username..." type="text" class="input-text required-entry " title="username" id="username" name="options[2]" value="">
+     
+  </div>
+  
+  </li>
+  <li>
+  
+  <div class="input-box padding_hf">
+      
+  <textarea placeholder="Write notification..." style=color:black rows="8" cols="57" class="join-container" title="notification"  id="notification" name=notification></textarea>
+   <div class="buttons-set padding_hf"> <br><br>
+                  
+      <input type="hidden" name="form_id" id="form_id" value="1">
+     
+      
+      <button type="submit" onclick="sendEmail()" class="btn">send</button>
+  
+  </div>
+      
         
     
 

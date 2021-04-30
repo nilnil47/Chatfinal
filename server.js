@@ -78,21 +78,24 @@ router.post("/resetpass", (req, res) => {
 
 router.get("/viewnegos/:username", (req, res) => {
     const { username } = req.params;
-    connection.query(`SELECT userCode FROM user WHERE username=?`,[username],function(error,result){
-        var id=((JSON.stringify(result)));
-        id=id.slice(13,15);
-        //fix to find number two
-        console.log(id);
-        connection.query(
-            `SELECT negoid, title FROM negotiation WHERE mediatoerCode=? OR userCode1=? OR userCode2=? `,
-            [id, id, id],
-            function (err, resl, fields) {
-                if (err) throw err;
-                res.send(resl);
-            }
-        );
-        });
-    
+    connection.query(
+        `SELECT userCode FROM user WHERE username=?`,
+        [username],
+        function (error, result) {
+            var id = JSON.stringify(result);
+            id = id.slice(13, 15);
+            //fix to find number two
+            console.log(id);
+            connection.query(
+                `SELECT negoid, title FROM negotiation WHERE mediatoerCode=? OR userCode1=? OR userCode2=? `,
+                [id, id, id],
+                function (err, resl, fields) {
+                    if (err) throw err;
+                    res.send(resl);
+                }
+            );
+        }
+    );
 });
 
 router.post("/sendEmail", (req, res) => {
@@ -149,6 +152,57 @@ router.post("/resetpassword", (req, res) => {
     });
 });
 
+router.post("/notification", (req, res) => {
+    connection.query(
+        `SELECT email FROM user WHERE username=? `,
+        [req.body.username],
+        function (error, result) {
+            if (error) {
+                console.log(
+                    "🚀 ~ file: server.js ~ line 157 ~ router.post ~ error",
+                    error
+                );
+                return;
+            }
+        //     const resultEmail =
+        //     result && result[0] && result[0].email ? result[0].email : null;
+        // res.send({ email: resultEmail });
+
+            res.send(result[0].email);
+
+            // var transporter = nodemailer.createTransport({
+            //     service: "gmail",
+            //     auth: {
+            //         user: "negoflict255@gmail.com",
+            //         pass: "barkonyo1",
+            //     },
+            // });
+
+            // var mailOptions = {
+            //     from: "negoflict255@gmail.com",
+            //     to: `${JSON.parse(JSON.stringify(result))}`,
+            //     subject: "Reset your password in NegoFlict web",
+            //     text:
+            //         "for reset your password click the next link http://localhost:3000/newpassword.html",
+            // };
+
+            // transporter.sendMail(mailOptions, function (error, info) {
+            //     if (error) {
+            //         console.log(error);
+            //     } else {
+            //         console.log("Email sent: " + info.response);
+            //     }
+            // });
+        }
+    );
+
+    // connection.query(
+    //     `INSERT INTO notifiactions (content) VALUES
+    //     ('${req.body.notification}')`,
+    //     function (error, result) {}
+    // );
+});
+
 router.post("/login", (req, res) => {
     var username = req.body.userName;
     var password = req.body.password;
@@ -173,16 +227,17 @@ router.post("/login", (req, res) => {
     );
 });
 
-
 router.get("/unapprovedMed", (req, res) => {
-    var num=0;
-    var k= 'mediator';   
-    connection.query(`SELECT firstName, lastName,username, education, proffesionalExperience FROM user WHERE approved=? AND userType=?`,[num,k],
-    function(error,result){
-        console.log(JSON.stringify(result));
-        res.send(result);
-        });
-    
+    var num = 0;
+    var k = "mediator";
+    connection.query(
+        `SELECT firstName, lastName,username, education, proffesionalExperience FROM user WHERE approved=? AND userType=?`,
+        [num, k],
+        function (error, result) {
+            console.log(JSON.stringify(result));
+            res.send(result);
+        }
+    );
 });
 
 router.post("/approvenMed", (req, res) => {
@@ -191,31 +246,43 @@ router.post("/approvenMed", (req, res) => {
         [req.body.username],
         function (error, result) {}
     );
-}); 
+});
+
+router.post("/assignmedi", (req, res) => {
+    connection.query(`SELECT userCode FROM user WHERE username=?`, [req.body.username],function(error,result){
+    connection.query(
+        `UPDATE negotiation SET mediatoerCode=('${result[0].userCode}') WHERE negoid=?`,[req.body.negoid], 
+        
+        function (error, result) {}
+    );
+   } );
+});
 
 
 router.get("/viewnegitaion", (req, res) => {
-  
-    connection.query(`SELECT title, description FROM negotiation WHERE mediatoerCode=?`,[100],
-    function(error,result){
-        //console.log(JSON.stringify(result));
+    connection.query(
+        `SELECT negoid, title, description FROM negotiation WHERE mediatoerCode=?`,
+        [100],
+        function (error, result) {
+            //console.log(JSON.stringify(result));
 
-        res.send(result);
-        });
-    
+            res.send(result);
+        }
+    );
 });
 
 router.get("/approvedMed", (req, res) => {
-    var num=1;
-    var k= 'mediator';   
-    connection.query(`SELECT username FROM user WHERE approved=? AND userType=?`,[num,k],
-    function(error,result){
-        //console.log(JSON.stringify(result));
-        res.send(result);
-        });
-    
+    var num = 1;
+    var k = "mediator";
+    connection.query(
+        `SELECT username FROM user WHERE approved=? AND userType=?`,
+        [num, k],
+        function (error, result) {
+            //console.log(JSON.stringify(result));
+            res.send(result);
+        }
+    );
 });
-
 
 router.post("/newnegotiation", (req, res) => {
     var id1, id2;
