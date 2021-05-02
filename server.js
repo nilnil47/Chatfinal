@@ -441,7 +441,17 @@ io.on("connection", (socket) => {
     socket.on("chatMessage", (msg) => {
         const user = getCurrentUser(socket.id);
         //console.log(msg);   //print the msg on the server, terminal
-        io.to(user.room).emit("message", formatMessage(user.username, msg)); //print everyone
+        //everyone
+      //  if( ){
+            io.to(user.room).emit("message", formatMessage(user.username, msg)); //print everyone
+
+     //   }
+        //spepchic  
+     //   else
+    //    {
+//io.to($).emit("message", formatMessage(user.username, msg)); //print everyone
+
+      //  }
 
         //save the msg in database
         connection.query(
@@ -466,3 +476,4 @@ io.on("connection", (socket) => {
 const PORT = 3000 || process.env.PORT;
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+ 
