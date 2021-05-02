@@ -98,6 +98,27 @@ router.get("/viewnegos/:username", (req, res) => {
     );
 });
 
+router.get("/getnot/:username", (req, res) => {
+    const { username } = req.params;
+    
+    connection.query(
+        `SELECT userCode FROM user WHERE username=?`,
+        [username],
+        function (error, result) {
+            var id = result[0].userCode;
+          
+            //fix to find number two
+            
+            connection.query(
+                `SELECT id, conent FROM notifications WHERE readen='0' AND userCode=?  `,[id],
+                function (err, resl, fields) {
+                    if (err) throw err;
+                    res.send(resl);
+                }
+            );
+        }
+    );
+});
 router.post("/sendEmail", (req, res) => {
     console.log(req.body);
 
@@ -108,7 +129,7 @@ router.post("/sendEmail", (req, res) => {
             pass: "barkonyo1",
         },
     });
-
+ 
     var mailOptions = {
         from: "negoflict255@gmail.com",
         to: "negoflict255@gmail.com",
@@ -123,6 +144,53 @@ router.post("/sendEmail", (req, res) => {
             console.log("Email sent: " + info.response);
         }
     });
+});
+
+
+router.post("/sendnotifaiction", (req, res) => {
+    console.log(req.body.notification);
+
+    connection.query(`SELECT userCode FROM user WHERE username=?`, [req.body.username],function(error,result){
+     //put if user not kaim
+        connection.query(
+            `INSERT INTO notifications (conent,UserCode) VALUES
+ ('${req.body.notification}','${result[0].userCode}')`
+     
+            ,function (error, result) {}
+        );});
+
+
+//         `INSERT INTO user (firstName,lastName,email,username,phone,userType,password) VALUES
+//  ('${req.body.firstName}','${req.body.lastName}','${req.body.email}','${req.body.username}','${req.body.phone}','${req.body.userType}','${req.body.password}')`
+
+    connection.query(`SELECT email FROM user WHERE username=?`, [req.body.username],function(error,resi){
+        var transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: "negoflict255@gmail.com",
+                pass: "barkonyo1",
+            },
+        });
+     
+        var mailOptions = {
+            from: "negoflict255@gmail.com",
+            to: `${resi[0].email}`,
+            subject: "new notification",
+            text: "You have a new notification from NegoFlict system.",
+        };
+    
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Email sent: " + info.response);
+            }
+        });
+    });
+       
+
+
+    
 });
 
 router.post("/resetpassword", (req, res) => {
@@ -228,11 +296,10 @@ router.post("/login", (req, res) => {
 });
 
 router.get("/unapprovedMed", (req, res) => {
-    var num = 0;
-    var k = "mediator";
+
     connection.query(
-        `SELECT firstName, lastName,username, education, proffesionalExperience FROM user WHERE approved=? AND userType=?`,
-        [num, k],
+        `SELECT firstName,lastName,username,education,proffesionalExperience FROM user WHERE approved=? AND userType=? AND userCode!=?`,
+        [0,'mediator',100],
         function (error, result) {
             console.log(JSON.stringify(result));
             res.send(result);
@@ -257,6 +324,16 @@ router.post("/assignmedi", (req, res) => {
     );
    } );
 });
+
+
+router.post("/read", (req, res) => {
+    connection.query(
+        `UPDATE notifications SET readen='1' WHERE id=?`,
+        [req.body.id],
+        function (error, result) {}
+    );
+});
+
 
 
 router.get("/viewnegitaion", (req, res) => {
@@ -354,7 +431,7 @@ io.on("connection", (socket) => {
         io.to(user.room).emit("roomUsers", {
             room: user.room,
             users: getRoomUsers(user.room),
-        });
+        }); 
     });
     // console.log('New Ws connection...');  //when we reload the page we have msg on the traminal that new ws is created
 
@@ -384,6 +461,8 @@ io.on("connection", (socket) => {
         }
     });
 });
+
+
 const PORT = 3000 || process.env.PORT;
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

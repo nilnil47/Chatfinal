@@ -23,6 +23,67 @@
         <h1 ><i><img src="https://scontent.ftlv6-1.fna.fbcdn.net/v/t1.6435-9/155379338_3912200072134580_7295162422057122146_n.jpg?_nc_cat=102&_nc_map=test-rt&ccb=1-3&_nc_sid=730e14&_nc_ohc=eN3je32BSmsAX8lpCam&_nc_ht=scontent.ftlv6-1.fna&oh=08864d6dc8d5c31140ef81f72874d587&oe=609B5173" 
         width="80" height="90" alt="webmaster logo" /></i>Notifications </h1>
       </header>
+    <center>  <h2 style="background-color: rgb(255, 255, 255); color: darkblue;">Please check notifications you have read</h2></center>
+    
+
+      <h1 id="data"  style="background-color: rgb(255, 255, 255); color: #000;">
+        
+
+
+        <script>
+          function read(id, negoid ){
+            src="https://smtpjs.com/v3/smtp.js"
+            const yourUrl = 'http://localhost:3000/api/read'
+            const object = { //put here relavent
+              id:id
+                          }
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", yourUrl, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(object));
+            alert("The message has been read ");
+          }
+          </script>
+
+
+      <script>
+          
+        const username = localStorage.getItem("username");
+
+        const yourUrl = "http://localhost:3000/api/getnot/" + username;
+
+        fetch(yourUrl)
+          .then(res=>res.json())
+          .then((res) => {
+            var strHtml = "";
+            var myarray = res;
+            console.log("🚀 ~ file: enterNegotiation.html ~ line 65 ~ fetch ~ myarray", myarray)
+            if(myarray=[])
+            {
+              strHtml += /*html*/`<div><center>
+                <h5>
+                You have no new notifications</h5>
+                `;
+            }
+            
+            myarray.forEach((obj) => {
+            let {id, conent } = obj;
+   
+            strHtml += /*html*/`<div>
+                <div>
+                  <h6>#${conent}
+                  <button type="submit"  style="color:white" onclick="read('${id}');"><img src="https://cdns.iconmonstr.com/wp-content/assets/preview/2018/240/iconmonstr-checkbox-checked-thin.png" width="20"></button></h6>
+                  <br>
+                </div>
+              </div>`;
+            });
+
+            console.log(strHtml);
+            document.getElementById("data").innerHTML = strHtml;
+          });
+        </script>
+        
+    
     
   
             <button type="submit" class="btn">Submit</button>

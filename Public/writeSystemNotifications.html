@@ -51,9 +51,9 @@
       
         
         <script>
-          function sendEmail(){
+          function sendnotifaiction(){
             src="https://smtpjs.com/v3/smtp.js"
-            const yourUrl = 'http://localhost:3000/api/notification'
+            const yourUrl = 'http://localhost:3000/api/sendnotifaiction'
             const object = { //put here relavent
               username:document.getElementById("username").value,
               notification:document.getElementById("notification").value
@@ -100,7 +100,7 @@
       <input type="hidden" name="form_id" id="form_id" value="1">
      
       
-      <button type="submit" onclick="sendEmail()" class="btn">send</button>
+      <button type="submit" onclick="sendnotifaiction()" class="btn">send</button>
   
   </div>
       

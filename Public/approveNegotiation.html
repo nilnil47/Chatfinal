@@ -16,7 +16,7 @@
   </head>
   <body>
     <div style="display: flex; justify-content: center">
-      
+       
     </div>
     <div class="join-container">
       <header class="join-header">
@@ -25,76 +25,180 @@
       </header> 
       
 
-      <h1 id="data"  style="background-color: rgb(255, 255, 255); color: #000;"></center>
+      <h1 id="data"   style="background-color: rgb(255, 255, 255); color: #000;"></center>
     
       
         <script>
-          function assignmediator(id, negoid ){
             src="https://smtpjs.com/v3/smtp.js"
-            const yourUrl = 'http://localhost:3000/api/assignmedi'
-            const object = { //put here relavent
-              username:document.getElementById(id).value,
-              negoid:negoid
-                          }
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", yourUrl, true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify(object));
-            alert("The assigenment has been done ");
-          }
-          </script>
-      <script>
-
+           const yourUrl = "http://localhost:3000/api/viewnegitaion";
         
-
-fetch("http://localhost:3000/api/viewnegitaion")
-    .then((res) => res.json())
-    .then((res) => {
-        var strHtml = "";
-        
-        var myarray = res;
-        myarray.forEach((obj,i) => {
-            let {negoid,title, description } = obj;
-            // ref doodel
-
-            strHtml += /*html*/ `<div>
+        fetch(yourUrl)
+          .then(res=>res.json())
+          .then((res) => {
+            var strHtml = "";
+            strHtml += /*html*/`
               
-                  <div style="display:flex;justify-content:space-between;padding:5px;">
-                        <h4> ${title},${description}</h4>
-                        <div style="display:flex;">
-                          <select id="mediators${i}"></select>
+       
+
+            <table border="2" width="200"  style="margin-left:auto; font-size:20px; margin-right:auto;">
+            <tr style="color:darkblue; font-size:25px">
+              
+              <th >Title</th>
+               <th>Description </th>
+               <th>Mediator</th>
+            
+  
+            </tr>
+              
+           
+      
+              `;
+            
+            var myarray = res;      
+            myarray.forEach((obj,i) => {
+            let { negoid, title, description} = obj;
+           // var name=obj.username;
+            strHtml += /*html*/`
+              
+<tr>
+  
+              <td>${title} </td>           
+              <td>${description}</td>
+          <td>    <select id="mediators${i}"></select></td>
+          
+          
+           <td><button id="mediators${i}" style="margin:0 5px;" onclick="assignmediator(this.id,${negoid}  )" >Assign </button></td>
+           
+
+            </tr>
+
+        
+             
+      
+              `;
+              fetch("http://localhost:3000/api/approvedMed")
+              .then((res) => res.json())
+             .then((res) => {
+
+              var arr=[]
+                 var userArray = res;
+                 let arr1 = userArray.map(function (element) {
+                     return element.username;
+                 });
+                 
+
+                   myarray.forEach((item,i)=>{
+                   const selectEl=document.getElementById(`mediators${i}`)
+                   const options=arr1.map(item=>/*html*/`<option>${item}</option>`).join('')
+                   selectEl.innerHTML=options;
+                 })
+  
+             });
+              
+
+            });
+            document.getElementById("data").innerHTML = strHtml;
+
+          });
+         
+             
+             
+              
+                      
+                           
+                    
+                            
+
+          function assignmediator(id, negoid ){
+            console.log(id,negoid);
+            var select = document.getElementById(id).value;
+          const yourUrl = 'http://localhost:3000/api/assignmedi'
+          const object = {
+            username:select,
+            negoid:negoid
+          }
+
+
+       
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", yourUrl, true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.send(JSON.stringify(object));
+      
+        } 
+
+
+
+
+
+            /////////////////////////////////
+
+//           function assignmediator(id, negoid ){
+//             src="https://smtpjs.com/v3/smtp.js"
+//             const yourUrl = 'http://localhost:3000/api/assignmedi'
+//             const object = { //put here relavent
+//               username:document.getElementById(id).value,
+//               negoid:negoid
+//                           }
+//             var xhr = new XMLHttpRequest();
+//             xhr.open("POST", yourUrl, true);
+//             xhr.setRequestHeader('Content-Type', 'application/json');
+//             xhr.send(JSON.stringify(object));
+//             alert("The assigenment has been done ");
+//           }
+//           </script>
+       <script>
+
+        
+
+// fetch("http://localhost:3000/api/viewnegitaion")
+//     .then((res) => res.json())
+//     .then((res) => {
+//         var strHtml = "";
+        
+//         var myarray = res;
+//         myarray.forEach((obj,i) => {
+//             let {negoid,title, description } = obj;
+//             // ref doodel
+
+//             strHtml += /*html*/ `<div>
+              
+//                   <div style="display:flex;justify-content:space-between;padding:5px;">
+//                         <h4> ${title},${description}</h4>
+//                         <div style="display:flex;">
+//                           <select id="mediators${i}"></select>
                           
 
-                          <button id="mediators${i}" style="margin:0 5px;" onclick="assignmediator(this.id,${negoid}  )" >Assign </button>  
-                        </div>
-                  </div>
-                </div>`;
-        });
+//                           <button id="mediators${i}" style="margin:0 5px;" onclick="assignmediator(this.id,${negoid}  )" >Assign </button>  
+//                         </div>
+//                   </div>
+//                 </div>`;
+//         });
 
-        //console.log(strHtml);
-        document.getElementById("data").innerHTML = strHtml;
-        return myarray
-    }).then(resMyArray=>{
-        var arr = [];
-        fetch("http://localhost:3000/api/approvedMed")
-            .then((res) => res.json())
-            .then((res) => {
-                var strHtml = "";
-                var arr=[]
-                var userArray = res;
+//         //console.log(strHtml);
+//         document.getElementById("data").innerHTML = strHtml;
+//         return myarray
+//     }).then(resMyArray=>{
+//         var arr = [];
+//         fetch("http://localhost:3000/api/approvedMed")
+//             .then((res) => res.json())
+//             .then((res) => {
+//                 var strHtml = "";
+//                 var arr=[]
+//                 var userArray = res;
 
-                let arr1 = userArray.map(function (element) {
-                    return element.username;
-                });
+//                 let arr1 = userArray.map(function (element) {
+//                     return element.username;
+//                 });
 
-                resMyArray.forEach((item,i)=>{
-                  const selectEl=document.getElementById(`mediators${i}`)
-                  const options=arr1.map(item=>/*html*/`<option>${item}</option>`).join('')
-                  selectEl.innerHTML=options;
-                })
+//                 resMyArray.forEach((item,i)=>{
+//                   const selectEl=document.getElementById(`mediators${i}`)
+//                   const options=arr1.map(item=>/*html*/`<option>${item}</option>`).join('')
+//                   selectEl.innerHTML=options;
+//                 })
   
-            });
-    })
+//             });
+//     })
 
 /***
      * // <label for="mediator">Assign a mediator:</label>
@@ -117,11 +221,9 @@ console.log(arr);
 <button onclick="GFG_Fun();">
 </button>
 */
-
-      </script>
+</script>
     
   
-            <button type="submit" class="btn">Submit</button>
           </a>
         </div>
       </main>
