@@ -71,6 +71,15 @@ function outputMessage(message) {
 function outputRoomName(room) {
     roomName.innerText = room;
 }
+//show in list
+function showList(users) {
+
+    const selectEl=[];
+    const options=users.map(item=>/*html*/`<option>${item}</option>`).join('')
+                   selectEl.innerHTML=options;
+                   document.getElementById("userof").innerHTML = selectEl;
+
+}
 
 //Add users to dom
 function outputUsers(users) {
@@ -141,4 +150,27 @@ socket.on("redirectOut", ({ users, username }) => {
     var loggedUser = localStorage.getItem("username");
     if (loggedUser != username) return;
     window.location.href = "/enterNegotiation.html";
+});
+
+socket.on("redirectOut", ({ users, username }) => {
+    console.log("bye");
+    outputUsers(users);
+    var loggedUser = localStorage.getItem("username");
+    if (loggedUser != username) return;
+    window.location.href = "/enterNegotiation.html";
+});
+
+
+socket.on("redirectOut", ({ users, username }) => {
+    console.log("bye");
+    outputUsers(users);
+    var loggedUser = localStorage.getItem("username");
+    if (loggedUser != username) return;
+    window.location.href = "/enterNegotiation.html";
+});
+
+
+
+socket.on("redirectOut", ({ users, username }) => {
+    showList(users);
 });
