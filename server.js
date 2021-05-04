@@ -423,7 +423,10 @@ io.on("connection", (socket) => {
         socket.join(user.room);
 
         //welcome current user
-        socket.emit("message", formatMessage(botName, "Welcome to NegoFlict!")); //for personal
+        socket.emit("message", {
+            users: getRoomUsers(user.room),
+            message: formatMessage(botName, "Welcome to NegoFlict!"),
+        }); //for personal
 
         //Broadcast when a user connects
         socket.broadcast
@@ -444,26 +447,39 @@ io.on("connection", (socket) => {
     //problem with the rooms
 
     //listen for chatMsg
-    socket.on("chatMessage", (msg) => {
+    socket.on("chatMessage", ({ msg, privateMsgTo }) => {
         const user = getCurrentUser(socket.id);
-        //console.log(msg);   //print the msg on the server, terminal
-        //everyone
-        //  if( ){
-        io.to(user.room).emit("message", formatMessage(user.username, msg)); //print everyone
-
-        //   }
-        //spepchic
-        //   else
-        //    {
-        //io.to($).emit("message", formatMessage(user.username, msg)); //print everyone
-
-        //  }
+        var users = getRoomUsers(user.room);
+        console.log(
+            "🚀 ~ file: server.js ~ line 451 ~ socket.on ~ privateMsgTo",
+            typeof privateMsgTo,user,users
+        );
+            //david sends to baros
+        if (privateMsgTo != "null") {
+            // the recipient
+            const recipient=users.find(u=>u.id===privateMsgTo)
+            io.to(privateMsgTo).emit("privateMsgTo",{ msg: formatMessage(user.username, msg) ,isSender:false });
+            // the sender
+            io.to(user.id).emit("privateMsgTo",{ msg: formatMessage(recipient.username, msg) ,isSender:true });
+        } else {
+            if (!user.room) return console.error(user, "no room?");
+            io.to(user.room).emit("message", {
+                message: formatMessage(user.username, msg),
+            }); //print everyone
+        }
 
         //save the msg in database
         connection.query(
             "INSERT INTO message (content) VALUES ('" + msg + "')",
             function (error, result) {}
         );
+    });
+
+    //listen for chat page load
+    socket.on("pageLoaded", () => {
+        const user = getCurrentUser(socket.id);
+
+        io.to(user.room).emit("pageLoad", { users: getRoomUsers(user.room) }); //print everyone
     });
 
     socket.on("userLeft", ({ username, room }) => {

@@ -35,10 +35,30 @@ socket.on("roomUsers", ({ room, users }) => {
 });
 
 //message from server
-socket.on("message", (message) => {
-    console.log(message); //print the msg from server welcome to nego and the other msgss
-    outputMessage(message);
+socket.on("message", ({ message }) => {
+    console.log(message, users); //print the msg from server welcome to nego and the other msgss
+    if (message) outputMessage(message);
+    //scroll down
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+});
+function onChatLoad() {
+    console.log("hi");
+    socket.emit("pageLoaded");
+}
+socket.on("pageLoad", ({ users }) => {
+    console.log(users);
+    if (users) showList(users);
+    //scroll down
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+});
+socket.on("privateMsgTo", ({ msg, isSender }) => {
+    console.log(
+        "🚀 ~ file: main.js ~ line 55 ~ socket.on ~ msg,isSender ",
+        msg,
+        isSender
+    );
 
+    if (msg) outputMessage(msg, isSender);
     //scroll down
     chatMessages.scrollTop = chatMessages.scrollHeight;
 });
@@ -48,21 +68,38 @@ chatForm.addEventListener("submit", (e) => {
     e.preventDefault();
     //get message text
     const msg = e.target.elements.msg.value;
+
+    const privateMsgTo = document.getElementById("userof").value;
+    console.log(
+        "🚀 ~ file: main.js ~ line 62 ~ chatForm.addEventListener ~ privateMsgTo",
+        { msg, privateMsgTo }
+    );
+
     //emit message to server to the board
-    socket.emit("chatMessage", msg);
+    socket.emit("chatMessage", { msg, privateMsgTo });
 
     //clear input
     e.target.elements.msg.value = "";
     e.target.elements.msg.focus(); //write enter messege
 });
 
+const listener = (eventName, ...args) => {
+    console.log("DEBUG", eventName, args);
+};
+
+socket.onAny(listener);
+
 //output message to Dom
-function outputMessage(message) {
+function outputMessage(message, isSender = null) {
     const div = document.createElement("div");
     div.classList.add("message"); //add class messege
-    div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
+    div.innerHTML = `<p class="meta">${message.username} <span>${
+        message.time
+    }</span></p>
     <p class="text">
-        ${message.text}
+        ${isSender === null ? "" : "PM-"}${
+        message.text
+    }
     </p>`;
     document.querySelector(".chat-messages").appendChild(div);
 }
@@ -71,14 +108,19 @@ function outputMessage(message) {
 function outputRoomName(room) {
     roomName.innerText = room;
 }
+
 //show in list
 function showList(users) {
-
-    const selectEl=[];
-    const options=users.map(item=>/*html*/`<option>${item}</option>`).join('')
-                   selectEl.innerHTML=options;
-                   document.getElementById("userof").innerHTML = selectEl;
-
+    console.log("🚀 ~ file: main.js ~ line 77 ~ showList ~ users", users);
+    let htmlStr = `<option value="null">everyone</option>`;
+    htmlStr += users
+        .filter((u) => u.username != localStorage.getItem("username"))
+        .map(
+            (user) =>
+                /*html*/ `<option value="${user.id}">${user.username}</option>`
+        )
+        .join("");
+    document.getElementById("userof").innerHTML = htmlStr;
 }
 
 //Add users to dom
@@ -147,30 +189,8 @@ exitUser.addEventListener("click", (e) => {
 socket.on("redirectOut", ({ users, username }) => {
     console.log("bye");
     outputUsers(users);
+
     var loggedUser = localStorage.getItem("username");
     if (loggedUser != username) return;
     window.location.href = "/enterNegotiation.html";
-});
-
-socket.on("redirectOut", ({ users, username }) => {
-    console.log("bye");
-    outputUsers(users);
-    var loggedUser = localStorage.getItem("username");
-    if (loggedUser != username) return;
-    window.location.href = "/enterNegotiation.html";
-});
-
-
-socket.on("redirectOut", ({ users, username }) => {
-    console.log("bye");
-    outputUsers(users);
-    var loggedUser = localStorage.getItem("username");
-    if (loggedUser != username) return;
-    window.location.href = "/enterNegotiation.html";
-});
-
-
-
-socket.on("redirectOut", ({ users, username }) => {
-    showList(users);
 });
