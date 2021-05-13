@@ -311,10 +311,123 @@ router.get("/unapprovedMed", (req, res) => {
     );
 });
 
+
+router.get("/query1", (req, res) => {
+    connection.query(
+        `SELECT firstName,lastName,username, userType, phone ,education,proffesionalExperience FROM user WHERE userType!=? AND userCode!=? ORDER BY 4,2`,
+        [ "manager", 100],
+        function (error, result) {
+            console.log(JSON.stringify(result));
+            res.send(result);
+        }
+    );
+});
+
+
+router.get("/query2", (req, res) => {
+    connection.query(
+        `SELECT  userCode ,firstName , lastName , userType , COUNT(*) AS Num
+         FROM user, negotiation
+         WHERE user.userCode = negotiation.userCode1 
+         OR user.userCode = negotiation.userCode2
+         OR user.userCode = negotiation.mediatoerCode 
+         AND userType!=? AND userCode!=?
+         GROUP BY  user.userCode
+         `,
+        [ "manager", 100],
+        function (error, result) {
+            console.log(JSON.stringify(result));
+            res.send(result);
+        }
+    );
+});
+
+router.get("/query3", (req, res) => {
+    connection.query(
+        `SELECT  negotiation.negoid,title, COUNT(*) AS Num
+         FROM message, negotiation
+         WHERE message.negoid = negotiation.negoid 
+         GROUP BY  negotiation.negoid
+         `,
+        function (error, result) {
+            console.log(JSON.stringify(result));
+            res.send(result);
+        }
+    );
+});
+
+router.get("/query4", (req, res) => {
+    connection.query(
+        `SELECT  negoid, title, description, startTime
+         FROM negotiation
+         WHERE endTime IS NULL
+         ORDER BY startTime`,
+        function (error, result) {
+            console.log(JSON.stringify(result));
+            res.send(result);
+        }
+
+
+    );
+});
+
+
+router.get("/query5", (req, res) => {
+    connection.query(
+        `SELECT  negoid, title, description, startTime, endTime
+         FROM negotiation
+         WHERE endTime IS NOT NULL
+         ORDER BY startTime`,
+        function (error, result) {
+            console.log(JSON.stringify(result));
+            res.send(result);
+        }
+
+
+    );
+});
+
+router.get("/query6", (req, res) => {
+    connection.query(
+        `SELECT userType, COUNT(*) AS num
+        FROM user
+        WHERE userCode != ? AND userType!=?
+        GROUP BY  userType;
+        `,[100,'manager'],
+        function (error, result) {
+            console.log(JSON.stringify(result));
+            res.send(result);
+        }
+
+
+    );
+});
+router.get("/query7", (req, res) => {
+    connection.query(
+        `SELECT  negoid, title, description, startTime, endTime
+         FROM negotiation
+         WHERE endTime IS NOT NULL
+         ORDER BY startTime`,
+        function (error, result) {
+            console.log(JSON.stringify(result));
+            res.send(result);
+        }
+
+
+    );
+});
 router.post("/approvenMed", (req, res) => {
     connection.query(
         `UPDATE user SET approved='1' WHERE username=?`,
         [req.body.username],
+        function (error, result) {}
+    );
+});
+
+router.post("/endnego", (req, res) => {
+    connection.query(
+        `UPDATE negotiation SET endTime=current_timestamp() WHERE negoid=?`,
+        [req.body.negoid],
         function (error, result) {}
     );
 });

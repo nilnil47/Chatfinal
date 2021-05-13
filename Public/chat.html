@@ -15,12 +15,19 @@
     <body onload="onChatLoad()">
         <div class="chat-container">
             <header class="chat-header">
-                <h1><i></i> NegoFlict</h1>
+                <h1><i></i> NegoFlict</h1><center>
                 <a
                     href="./enterNegotiation.html"
                     class="btn_leave"
                     id="exitUser"
-                    >Leave Room</a
+                    >Leave Room </a</center>
+                
+                <a
+                    href="./enterNegotiation.html"
+                    class="btn_leave"
+                    id="endnego"
+                    onclick="end()"
+                    >End Conflict</a
                 >
             </header>
             <main class="chat-main">
@@ -61,5 +68,25 @@
         ></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="js/main.js"></script>
+        <script>
+            function end(){
+              const yourUrl = 'http://localhost:3000/api/endnego';
+              var params = new URLSearchParams(url.search);
+              var negoid = params.get("negoid");
+              const object = { //put here relavent
+ 
+                negoid:negoid
+               
+              }
+        
+        
+              console.log(object);
+              var xhr = new XMLHttpRequest();
+              xhr.open("POST", yourUrl, true);
+              xhr.setRequestHeader('Content-Type', 'application/json');
+              xhr.send(JSON.stringify(object));
+              
+            }
+            </script>
     </body>
 </html>
