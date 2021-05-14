@@ -23,12 +23,20 @@
                     >Leave Room </a</center>
                 
                 <a
-                    href="./enterNegotiation.html"
+
                     class="btn_leave"
                     id="endnego"
                     onclick="end()"
                     >End Conflict</a
                 >
+                <a
+                    class="btn_leave"
+                    id="endnego"
+                    onclick="end()"
+                    >Write insight</a
+                >
+
+                
             </header>
             <main class="chat-main">
                 <div class="chat-sidebar">
@@ -70,21 +78,25 @@
         <script src="js/main.js"></script>
         <script>
             function end(){
-              const yourUrl = 'http://localhost:3000/api/endnego';
-              var params = new URLSearchParams(url.search);
+                var params = new URLSearchParams(url.search);
               var negoid = params.get("negoid");
-              const object = { //put here relavent
+              const yourUrl = 'http://localhost:3000/api/endnego';
+              const object1 = { //put here relavent
  
-                negoid:negoid
-               
-              }
-        
-        
-              console.log(object);
+ negoid:negoid
+
+}
               var xhr = new XMLHttpRequest();
               xhr.open("POST", yourUrl, true);
               xhr.setRequestHeader('Content-Type', 'application/json');
-              xhr.send(JSON.stringify(object));
+              xhr.send(JSON.stringify(object1));
+            
+        
+                console.log(negoid);
+  
+              window.location.href=`./fidbecnego.html?negoid=`+negoid;
+
+              
               
             }
             </script>

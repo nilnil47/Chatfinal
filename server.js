@@ -416,6 +416,26 @@ router.get("/query7", (req, res) => {
 
     );
 });
+
+router.get("/query8/:username", (req, res) => {
+    const { username } = req.params;
+    connection.query(
+        `SELECT userCode FROM user WHERE username=?`,
+        [username],
+        function (error, result) {
+    connection.query(
+        `SELECT  mediatoerCode, title, description, endTime, summary
+         FROM negotiation
+         WHERE summary IS NOT NULL AND mediatoerCode=?
+         ORDER BY endTime`,[result[0].userCode],
+        function (error, res1) {
+            res.send(res1);
+        }
+    );
+}
+    );
+});
+
 router.post("/approvenMed", (req, res) => {
     connection.query(
         `UPDATE user SET approved='1' WHERE username=?`,
@@ -431,6 +451,53 @@ router.post("/endnego", (req, res) => {
         function (error, result) {}
     );
 });
+
+router.post("/addsummary", (req, res) => {
+    connection.query(
+        `UPDATE negotiation SET summary=? WHERE negoid=?`,
+        [req.body.summary,req.body.negoid],
+        function (error, result) {}
+    );
+    connection.query(
+        `SELECT userCode1, userCode2, title FROM negotiation WHERE negoid=?`,
+        [req.body.negoid],
+function(err,res1){
+    connection.query(
+        
+        `SELECT email FROM user WHERE userCode=? OR userCode=?`,
+        [res1[0].userCode1,res1[0].userCode2],
+function(err,res){
+    console.log(res);
+    var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+            user: "negoflict255@gmail.com",
+            pass: "barkonyo1",
+        },
+    });
+
+    var mailOptions = {
+        from: "negoflict255@gmail.com",
+        to: `${res[0].email}, ${res[1].email}` ,
+        subject: "Negotiation Summary",
+        text:
+            `The mediator has submit a negotiation summary for negotiation ${res1[0].title} : ${req.body.summary}. 
+            BR, NegoFlict`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log("Email sent: " + info.response);
+        }
+    });
+}
+    );
+}    
+
+); });
+
 
 router.post("/assignmedi", (req, res) => {
     connection.query(
