@@ -16,27 +16,27 @@
         <div class="chat-container">
             <header class="chat-header">
                 <h1><i></i> NegoFlict</h1><center>
+                
+                
+                <a
+
+                    class="btn_leave "
+                    id="endnego"
+                    onclick="end()"
+                    >Mediator-End Conflict</a
+                </center>
+                <a
+                    class="btn_leave"
+                    id="endnego"
+                    onclick="insti()"
+                    >Mediator-Write insight</a
+                >
+
                 <a
                     href="./enterNegotiation.html"
                     class="btn_leave"
                     id="exitUser"
-                    >Leave Room </a</center>
-                
-                <a
-
-                    class="btn_leave"
-                    id="endnego"
-                    onclick="end()"
-                    >End Conflict</a
-                >
-                <a
-                    class="btn_leave"
-                    id="endnego"
-                    onclick="end()"
-                    >Write insight</a
-                >
-
-                
+                    >Leave Room </a>
             </header>
             <main class="chat-main">
                 <div class="chat-sidebar">
@@ -95,6 +95,16 @@
                 console.log(negoid);
   
               window.location.href=`./fidbecnego.html?negoid=`+negoid;
+
+              
+              
+            }
+            function insti(){
+                var params = new URLSearchParams(url.search);
+              var negoid = params.get("negoid");
+              console.log(negoid);
+  
+              window.open(`./writeinsight.html?negoid=`+negoid);
 
               
               

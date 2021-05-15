@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+      integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>insight</title>
+  </head>
+
+  <script>
+    function submit(){
+      const yourUrl = 'http://localhost:3000/api/addinsight';
+      let params = (new URL(document.location)).searchParams;
+      let negoid = params.get('negoid');
+          // const urlSearchParams = url.searchParams
+         
+          // var params = new URLSearchParams(url.search);
+          //     var negoid = params.get("negoid");
+              console.log(negoid);
+              const object = { //put here relavent
+ 
+                negoid:negoid,
+                insight:document.getElementById("insight").value,
+                username:localStorage.getItem("username")
+               
+              }
+        
+        
+              var xhr = new XMLHttpRequest();
+              xhr.open("POST", yourUrl, true); 
+              xhr.setRequestHeader('Content-Type', 'application/json');
+              xhr.send(JSON.stringify(object));    
+              alert("Your insight is saved, you can return to the chat and continue negotiation")          
+    }
+    </script>
+  <body>
+    <div style="display: flex; justify-content: center">
+      
+    </div>
+    <div class="join-container">
+      <header class="join-header">
+        <h1 ><i><img src="https://scontent.ftlv5-1.fna.fbcdn.net/v/t1.6435-9/155379338_3912200072134580_7295162422057122146_n.jpg?_nc_cat=102&_nc_map=test-rt&ccb=1-3&_nc_sid=730e14&_nc_ohc=ci1YXJ2WmCgAX-JmapW&_nc_ht=scontent.ftlv5-1.fna&oh=ced579c41d07ceec0110cb82840997b3&oe=60C2DE73" 
+        width="80" height="90" alt="webmaster logo" /></i> Write Your Insight</h1>
+      </header>
+      <main class="join-main">
+   
+         
+          <div class="form-control">
+          <textarea placeholder="Write your insight..." style=color:black  rows="8" cols="57" class="join-container" title="insight"  id="insight" name="options[8]"></textarea>
+        </div>
+        <div class="form-control ">
+          <form action="/action_page.php">
+              <input type="file" id="myFile" name="filename" style="color:black">
+              <input type="submit">
+            </form>
+        </div>
+        <button type="submit" onclick="submit()" class="btn">Send</button></a>
+
+         
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

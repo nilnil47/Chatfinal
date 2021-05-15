@@ -435,6 +435,17 @@ router.get("/query8/:username", (req, res) => {
 }
     );
 });
+router.get("/query9", (req, res) => {
+
+    connection.query(
+        `SELECT  username, title, content
+         FROM insight`,
+        function (error, res1) {
+            res.send(res1);
+        }
+    );
+}
+    );
 
 router.post("/approvenMed", (req, res) => {
     connection.query(
@@ -497,6 +508,36 @@ function(err,res){
 }    
 
 ); });
+
+
+router.post("/addinsight", (req, res) => {
+    connection.query(`SELECT mediatoerCode, title FROM negotiation WHERE negoid=?`,
+    [req.body.negoid],function(err,res1,fields){ 
+        
+        connection.query(`SELECT username FROM user WHERE userCode=?`,
+    [res1[0].mediatoerCode],function(err1,res2){
+        
+   
+
+    
+        
+
+        connection.query(
+            `INSERT INTO insight (username,title,content) VALUES
+            ('${res2[0].username}','${res1[0].title}', '${req.body.insight}')`,
+            function (error, result) {
+            }
+    );
+
+    });
+    
+    
+
+    
+}    
+
+);} );
+
 
 
 router.post("/assignmedi", (req, res) => {
