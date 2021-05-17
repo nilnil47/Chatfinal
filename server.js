@@ -649,6 +649,24 @@ io.on("connection", (socket) => {
             message: formatMessage(botName, "Welcome to NegoFlict!"),
         }); //for personal
 
+        if(user.room="forum"){
+            const history=[];
+            connection.query(`SELECT content,userCode FROM message WHERE negoid=?`,
+            [100],function(err,res1){
+                res1.forEach(msg => {
+                    connection.query(`SELECT username FROM user WHERE userCode=?`,
+                    [msg.userCode],function(err,res2){
+                    console.log(msg);
+                    socket.emit("message",msg.content);
+                    io.to(user.room).emit("message", {
+                        message: formatMessage(res2[0].username, msg.content)});
+                    });
+                });
+
+            });
+
+        }
+
         //Broadcast when a user connects
         socket.broadcast
             .to(user.room)
@@ -689,12 +707,23 @@ io.on("connection", (socket) => {
             }); //print everyone
         }
 
+
+
         //save the msg in database
+        connection.query(`SELECT userCode FROM user WHERE username=?`,
+        [user.username],function(err,res){
+            connection.query(`SELECT negoid FROM negotiation WHERE title=?`,
+            [user.room],function(err,res1){
+                console.log(res[0].userCode,res1[0].negoid);
         connection.query(
-            "INSERT INTO message (content) VALUES ('" + msg + "')",
+            `INSERT INTO message (content, userCode,negoid) VALUES ('${msg}','${res[0].userCode}','${res1[0].negoid}')`,
             function (error, result) {}
         );
+            });
     });
+    });
+
+
 
     //listen for chat page load
     socket.on("pageLoaded", () => {
