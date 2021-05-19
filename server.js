@@ -647,10 +647,12 @@ io.on("connection", (socket) => {
         socket.emit("message", {
             users: getRoomUsers(user.room),
             message: formatMessage(botName, "Welcome to NegoFlict!"),
-        }); //for personal
+        }); //for personal        
 
-        if(user.room="forum"){
+
+        if(user.room==="forum"){
             const history=[];
+
             connection.query(`SELECT content,userCode FROM message WHERE negoid=?`,
             [100],function(err,res1){
                 res1.forEach(msg => {
@@ -668,12 +670,13 @@ io.on("connection", (socket) => {
         }
 
         //Broadcast when a user connects
-        socket.broadcast
+            socket.broadcast
             .to(user.room)
             .emit(
                 "message",
                 formatMessage(botName, `${user.username} has joined the chat`)
             ); //for everyone
+            
 
         //send users and room info
         io.to(user.room).emit("roomUsers", {
@@ -707,7 +710,7 @@ io.on("connection", (socket) => {
             }); //print everyone
         }
 
-
+        
 
         //save the msg in database
         connection.query(`SELECT userCode FROM user WHERE username=?`,
@@ -721,8 +724,10 @@ io.on("connection", (socket) => {
         );
             });
     });
-    });
+        
 
+    });
+  
 
 
     //listen for chat page load
@@ -756,6 +761,7 @@ io.on("connection", (socket) => {
                 formatMessage(botName, `${user.username} has left the chat`)
             );
         }
+        
     });
 });
 
