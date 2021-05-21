@@ -646,8 +646,9 @@ io.on("connection", (socket) => {
         //welcome current user
         socket.emit("message", {
             users: getRoomUsers(user.room),
-            message: formatMessage(botName, "Welcome to NegoFlict!"),
+            message: formatMessage(botName, "Welcome to NegoFlict!")
         }); //for personal        
+        
 
 
         if(user.room==="forum"){
@@ -672,16 +673,17 @@ io.on("connection", (socket) => {
         //Broadcast when a user connects
             socket.broadcast
             .to(user.room)
-            .emit(
-                "message",
-                formatMessage(botName, `${user.username} has joined the chat`)
-            ); //for everyone
+            .emit("message", {
+                users: getRoomUsers(user.room),
+                message:formatMessage(botName, `${user.username} has joined the chat`)
+
+            });
             
 
         //send users and room info
         io.to(user.room).emit("roomUsers", {
             room: user.room,
-            users: getRoomUsers(user.room),
+            users: getRoomUsers(user.room)
         });
     });
     // console.log('New Ws connection...');  //when we reload the page we have msg on the traminal that new ws is created
@@ -702,7 +704,7 @@ io.on("connection", (socket) => {
             const recipient=users.find(u=>u.id===privateMsgTo)
             io.to(privateMsgTo).emit("privateMsgTo",{ msg: formatMessage(user.username, msg) ,isSender:false });
             // the sender
-            io.to(user.id).emit("privateMsgTo",{ msg: formatMessage(recipient.username, msg) ,isSender:true });
+            io.to(user.id).emit("privateMsgTo",{ msg: formatMessage(user.username, msg) ,isSender:true });
         } else {
             if (!user.room) return console.error(user, "no room?");
             io.to(user.room).emit("message", {
@@ -724,6 +726,30 @@ io.on("connection", (socket) => {
         );
             });
     });
+    word=["fuck","no","dont","hate","angry","!!!","..."];
+
+    if(msg.includes("fuck")===true||msg.includes("no")===true||msg.includes("dont")===true||msg.includes("hate")===true||msg.includes("angry")===true||msg.includes("!!!")===true||msg.includes("...")===true||msg.includes("shut up")===true){
+        io.to(user.id)            
+            .emit("message", {
+                users: getRoomUsers(user.room),
+                message:formatMessage(botName, `Hi ${user.username}, you look little angry. for the negotiation will succed i hope you relax`)
+
+            });
+        //     console.log(user.id);
+        //     connection.query(`SELECT mediatoerCode FROM negotiation WHERE title=?`,
+        //     [user.room],function(err,res1){
+        //         connection.query(`SELECT username FROM user WHERE userCode=?`,
+        // [res1[0].mediatoerCode],function(err,res){ 
+        //     io.to(res1[0].mediatoerCode)            
+        //     .emit("message", {
+        //         users: getRoomUsers(user.room),
+        //         message:formatMessage(botName, `Hi ${user.username}, look little angry. for the negotiation will succed i hope you relax`)
+
+        //     });
+        // });
+        //     });
+    }
+
         
 
     });
@@ -738,13 +764,13 @@ io.on("connection", (socket) => {
     });
 
     socket.on("userLeft", ({ username, room }) => {
-        console.log({ username, room });
         const user = userLeave(socket.id);
         if (user) {
-            io.to(user.room).emit(
-                "message",
-                formatMessage(botName, `${user.username} has left the chat`)
-            );
+            io.to(user.room)
+            .emit("message", {
+                users: getRoomUsers(user.room),
+                message: formatMessage(botName, `${user.username} has left the chat`)});
+
             io.to(user.room).emit("redirectOut", {
                 users: getRoomUsers(user.room),
                 username,
@@ -757,8 +783,9 @@ io.on("connection", (socket) => {
         const user = userLeave(socket.id);
         if (user) {
             io.to(user.room).emit(
-                "message",
-                formatMessage(botName, `${user.username} has left the chat`)
+                "message",{
+                users: getRoomUsers(user.room),
+                message: formatMessage(botName, `${user.username} has left the chat`)   }             
             );
         }
         
