@@ -15,7 +15,7 @@
     <header class="join-header">
       <script>
         function submit(){
-          const yourUrl = 'http://localhost:3000/api/users'
+          const yourUrl = '/api/users'
           const object = {
             firstName:document.getElementById("firstname").value,
             lastName:document.getElementById("lastname").value,
@@ -24,7 +24,7 @@
 
           }
 
-          const urlToGet= 'http://localhost:3000/api/users/123'
+          const urlToGet= '/api/users/123'
 
           console.log(object);
           var xhr = new XMLHttpRequest();

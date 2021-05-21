@@ -30,7 +30,7 @@
       
         <script>
             src="https://smtpjs.com/v3/smtp.js"
-           const yourUrl = "http://localhost:3000/api/viewnegitaion";
+           const yourUrl = "/api/viewnegitaion";
         
         fetch(yourUrl)
           .then(res=>res.json())
@@ -76,7 +76,7 @@
              
       
               `;
-              fetch("http://localhost:3000/api/approvedMed")
+              fetch("/api/approvedMed")
               .then((res) => res.json())
              .then((res) => {
 
@@ -112,7 +112,7 @@
           function assignmediator(id, negoid ){
             console.log(id,negoid);
             var select = document.getElementById(id).value;
-          const yourUrl = 'http://localhost:3000/api/assignmedi'
+          const yourUrl = '/api/assignmedi'
           const object = {
             username:select,
             negoid:negoid

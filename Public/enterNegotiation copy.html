@@ -59,7 +59,7 @@
           const userId = localStorage.getItem('id')
      
             console.log(userId)
-          const yourUrl = 'http://localhost:3000/api/viewnegos/'+userId;
+          const yourUrl = '/api/viewnegos/'+userId;
           var xhr = new XMLHttpRequest();
           xhr.open("GET", yourUrl, true);
           xhr.setRequestHeader('Content-Type', 'application/json');

@@ -58,7 +58,7 @@
           
         const username = localStorage.getItem("username");
 
-        const yourUrl = "http://localhost:3000/api/viewnegos/" + username;
+        const yourUrl = "/api/viewnegos/" + username;
         fetch(yourUrl)
           .then(res=>res.json())
           .then((res) => {

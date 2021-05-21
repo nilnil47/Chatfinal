@@ -33,7 +33,7 @@
         <script>
           function read(id, negoid ){
             src="https://smtpjs.com/v3/smtp.js"
-            const yourUrl = 'http://localhost:3000/api/read'
+            const yourUrl = '/api/read'
             const object = { //put here relavent
               id:id
                           }
@@ -51,7 +51,7 @@
           
         const username = localStorage.getItem("username");
 
-        const yourUrl = "http://localhost:3000/api/getnot/" + username;
+        const yourUrl = "/api/getnot/" + username;
 
         fetch(yourUrl)
           .then(res=>res.json())
