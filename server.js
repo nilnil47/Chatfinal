@@ -34,9 +34,9 @@ const { hostname } = require("os");
 try {
   var connection = mysql.createConnection({
     host: "localhost",
-    user: "barkonyo",
-    password: "barbar",
-    database: "db_admin",
+    user: "id16620362_barkonyo",
+    password: "|ZLhJbjT0tEOWpYz",
+    database: "id16620362_db_admin",
   });
 
   connection.query("SELECT 1 AS online", function (error, results, fields) {
