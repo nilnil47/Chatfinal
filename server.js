@@ -1,3 +1,10 @@
+const dotenv = require('dotenv')
+const result = dotenv.config()
+
+if (result.error) {
+  throw result.error
+}
+
 const path = require("path");
 const http = require("http");
 const url = require("url");
@@ -33,18 +40,18 @@ const { hostname } = require("os");
 //create connection
 try {
   var connection = mysql.createConnection({
-    host: "localhost",
-    user: "barkonyo",
-    password: "barbar",
-    database: "db_admin",
+    host: process.env.HOST,
+    user:process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE,
   });
 
-  connection.query("SELECT 1 AS online", function (error, results, fields) {
-    // if (error) console.log(error);
-    // console.log("The db is online: ", results[0].online);
-  });
+  // connection.query("SELECT 1 AS online", function (error, results, fields) {
+  //   if (error) console.log(error);
+  //   console.log("The db is online: ", results[0].online);
+  // });
 } catch (err) {
-  //   console.log(err);
+    console.log(err);
 }
 //set static folderמפצ
 app.use(express.static(path.join(__dirname, "Public")));
