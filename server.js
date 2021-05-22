@@ -46,10 +46,12 @@ try {
     database: process.env.DATABASE,
   });
 
-  // connection.query("SELECT 1 AS online", function (error, results, fields) {
-  //   if (error) console.log(error);
-  //   console.log("The db is online: ", results[0].online);
-  // });
+  connection.query("SELECT 1 AS online", function (error, results, fields) {
+    if (error) console.log(error);
+    console.log("The db is online: ", results[0].online);
+  });
+
+  
 } catch (err) {
     console.log(err);
 }
