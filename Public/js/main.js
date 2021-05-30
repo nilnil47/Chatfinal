@@ -59,8 +59,8 @@ sendButton.addEventListener("typing", () => {
         message.time
     }</span></p>
     <p class="text">
-        ${isSender === null ? "" : "Private message-"}${
-        message.text
+        ${isSender === null ? "" : "Private message from-"}${
+            message.username+ "-"+message.text
     }
     </p>`;
     document.querySelector(".chat-messages").appendChild(div);
@@ -130,8 +130,8 @@ function outputMessage(message, isSender = null) {
         message.time
     }</span></p>
     <p class="text">
-        ${isSender === null ? "" : "Private message-"}${
-        message.text
+        ${isSender === null ? "" : "Private messager from -"}${
+            message.username+ "-"+message.text
     }
     </p>`;
     document.querySelector(".chat-messages").appendChild(div);
