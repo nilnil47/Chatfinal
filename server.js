@@ -634,10 +634,17 @@ io.on("connection", (socket) => {
         
         socket.on('typing', (data)=>{
             if(data.typing==true)
-               io.emit('display', data)
-            else
-               io.emit('display', data)
-          })
+            socket.broadcast.to(user.room).emit("message", {
+                users: getRoomUsers(user.room),
+                message: formatMessage(
+                    botName,
+                    `${user.username} is typing`
+                ),
+            });
+           
+            
+        });
+          
 
         //welcome current user
         socket.emit("message", {
