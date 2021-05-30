@@ -37,8 +37,6 @@ socket.on("roomUsers", ({ room, users }) => {
 var typing=false;
 var timeout=undefined;
 
-
-
 sendButton.addEventListener("typing", () => {
     io.emit("chat_message", messageInput.value);
   });
@@ -53,17 +51,7 @@ sendButton.addEventListener("typing", () => {
       return;
     }
   
-    const div = document.createElement("div");
-    div.classList.add("message"); //add class messege
-    div.innerHTML = `<p class="meta">${message.username} <span>${
-        message.time
-    }</span></p>
-    <p class="text">
-        ${isSender === null ? "" : "Private message from-"}${
-            message.username+ "-"+message.text
-    }
-    </p>`;
-    document.querySelector(".chat-messages").appendChild(div);
+    fallback.innerHTML = `<p>${nick} is typing...</p>`;
   });
 
 
@@ -130,8 +118,8 @@ function outputMessage(message, isSender = null) {
         message.time
     }</span></p>
     <p class="text">
-        ${isSender === null ? "" : "Private messager from -"}${
-            message.username+ "-"+message.text
+        ${isSender === null ? "" : "Private message-"}${
+        message.username
     }
     </p>`;
     document.querySelector(".chat-messages").appendChild(div);
