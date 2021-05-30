@@ -633,6 +633,7 @@ io.on("connection", (socket) => {
         socket.join(user.room);
         
         socket.on("typing", function(data){
+            console.log("good");
             socket.broadcast.to(user.room).emit("message", {
                 users: getRoomUsers(user.room),
                 message: formatMessage(

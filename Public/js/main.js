@@ -34,6 +34,20 @@ socket.on("roomUsers", ({ room, users }) => {
     outputUsers(users);
 });
 
+
+const fallback = document.querySelector(".fallback");
+
+socket.on("typing", function (data) {
+    const { isTyping, nick } = data;
+  
+    if (!isTyping) {
+      fallback.innerHTML = "";
+      return;
+    }
+  
+    fallback.innerHTML = `<p>${nick} is typing...</p>`;
+  });
+
 //message from server
 socket.on("message", ({ message }) => {
     console.log(message, users); //print the msg from server welcome to nego and the other msgss
