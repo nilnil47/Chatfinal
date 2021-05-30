@@ -42,11 +42,11 @@ message.bind("keypress", e => {
     }
 });
 
-//Listen on typing
-socket.on('typing', (data) => {
-    const message=data.username + " is typing a message...";
-    outputMessage(message)
-});
+// //Listen on typing
+// socket.on('typing', (data) => {
+//     const message=data.username + " is typing a message...";
+//     outputMessage(message)
+// });
 
 //message from server
 socket.on("message", ({ message }) => {
