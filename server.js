@@ -437,7 +437,7 @@ router.get("/query8/:username", (req, res) => {
                 }
             );
         }
-    );
+    ); 
 });
 router.get("/query9", (req, res) => {
     connection.query(
