@@ -97,12 +97,11 @@ router.get("/viewnegos/:username", (req, res) => {
         `SELECT userCode FROM user WHERE username=?`,
         [username],
         function (error, result) {
-            var id = JSON.stringify(result);
-            id = id.slice(13, 15);
+            var id = result[0].userCode;
             //fix to find number two
             console.log(id);
             connection.query(
-                `SELECT negoid, title FROM negotiation WHERE mediatoerCode=? OR userCode1=? OR userCode2=? `,
+                `SELECT negoid, title FROM negotiation WHERE mediatoerCode=? OR userCode1=? OR userCode2=? AND endTime IS NOT NULL`,
                 [id, id, id],
                 function (err, resl, fields) {
                     if (err) throw err;
@@ -718,6 +717,18 @@ io.on("connection", (socket) => {
                 message: formatMessage(user.username, msg),
             }); //print everyone
         }
+
+        //Show someone writing
+        socket.on('typing', function(data){
+            socket.broadcast.to(user.room).emit("message", {
+                users: getRoomUsers(user.room),
+                message: formatMessage(
+                    botName,
+                    `${user.username} is writing`
+                ),
+            });
+    
+        });
 
         //save the msg in database
         connection.query(

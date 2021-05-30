@@ -39,6 +39,33 @@ var timeout=undefined;
 
 
 
+sendButton.addEventListener("typing", () => {
+    io.emit("chat_message", messageInput.value);
+  });
+
+  const fallback = document.querySelector(".fallback");
+
+  socket.on("typing", function (data) {
+    const { isTyping, nick } = data;
+  
+    if (!isTyping) {
+      fallback.innerHTML = "";
+      return;
+    }
+  
+    const div = document.createElement("div");
+    div.classList.add("message"); //add class messege
+    div.innerHTML = `<p class="meta">${message.username} <span>${
+        message.time
+    }</span></p>
+    <p class="text">
+        ${isSender === null ? "" : "Private message-"}${
+        message.text
+    }
+    </p>`;
+    document.querySelector(".chat-messages").appendChild(div);
+  });
+
 
 //message from server
 socket.on("message", ({ message }) => {
