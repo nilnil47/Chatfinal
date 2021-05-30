@@ -773,12 +773,7 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on('typing', (data)=>{
-        if(data.typing==true)
-           io.emit('display', data)
-        else
-           io.emit('display', data)
-      });
+
   
 
     //listen for chat page load
