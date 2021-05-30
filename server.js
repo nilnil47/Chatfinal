@@ -634,21 +634,7 @@ io.on("connection", (socket) => {
         
      
           
-        socket.on('typing', function(room) {
-            if (!socket.authenticated) {
-             return;
-            }
-          
-            socket.on('typing', function (msg) {
-                socket.broadcast.to(user.room).emit("message", {
-                    users: getRoomUsers(user.room),
-                    message: formatMessage(
-                        botName,
-                        `${user.username} is typing`
-                    )
-                });
-           });
-        });
+       
 
         //welcome current user
         socket.emit("message", {
@@ -786,6 +772,14 @@ io.on("connection", (socket) => {
             //     });
         }
     });
+
+    socket.on('typing', (data)=>{
+        if(data.typing==true)
+           io.emit('display', data)
+        else
+           io.emit('display', data)
+      });
+  
 
     //listen for chat page load
     socket.on("pageLoaded", () => {
