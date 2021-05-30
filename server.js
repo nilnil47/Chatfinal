@@ -720,16 +720,15 @@ io.on("connection", (socket) => {
         }
 
         //Show someone writing
-        socket.on('typing', function(data){
-            socket.broadcast.to(user.room).emit("message", {
-                users: getRoomUsers(user.room),
-                message: formatMessage(
-                    botName,
-                    `${user.username} is writing`
-                ),
-            });
-    
-        });
+        socket.on('typing', data => {
+        
+        socket.broadcast.to(user.room).emit("typing", {
+            users: getRoomUsers(user.room),
+            message: formatMessage(
+                botName,
+                `${user.username} is writing`
+            ),
+        });})
 
         //save the msg in database
         connection.query(
