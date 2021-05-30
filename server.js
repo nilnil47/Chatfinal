@@ -632,18 +632,15 @@ io.on("connection", (socket) => {
         const user = userJoin(socket.id, username, room);
         socket.join(user.room);
         
-        socket.on("typing", function(data){
-            console.log("good");
+        socket.on('typing', function (msg) {
             socket.broadcast.to(user.room).emit("message", {
                 users: getRoomUsers(user.room),
                 message: formatMessage(
                     botName,
                     `${user.username} is typing`
-                )
+                ),
             });
-             });
-            
-        
+        });
           
 
         //welcome current user
