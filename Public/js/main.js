@@ -101,7 +101,7 @@ function outputMessage(message, isSender = null) {
     }</span></p>
     <p class="text">
         ${isSender === null ? "" : "Private message-"}${
-        message.text
+        message.username
     }
     </p>`;
     document.querySelector(".chat-messages").appendChild(div);
