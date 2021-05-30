@@ -631,6 +631,13 @@ io.on("connection", (socket) => {
     socket.on("joinRoom", ({ username, room }) => {
         const user = userJoin(socket.id, username, room);
         socket.join(user.room);
+        
+        socket.on('typing', (data)=>{
+            if(data.typing==true)
+               io.emit('display', data)
+            else
+               io.emit('display', data)
+          })
 
         //welcome current user
         socket.emit("message", {
@@ -686,6 +693,7 @@ io.on("connection", (socket) => {
 
     //listen for chatMsg
     socket.on("chatMessage", ({ msg, privateMsgTo }) => {
+
         const user = getCurrentUser(socket.id);
         var users = getRoomUsers(user.room);
         console.log(
@@ -719,6 +727,7 @@ io.on("connection", (socket) => {
             `SELECT userCode FROM user WHERE username=?`,
             [user.username],
             function (err, res) {
+                
                 connection.query(
                     `SELECT negoid FROM negotiation WHERE title=?`,
                     [user.room],
