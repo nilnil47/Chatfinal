@@ -632,16 +632,23 @@ io.on("connection", (socket) => {
         const user = userJoin(socket.id, username, room);
         socket.join(user.room);
         
-        socket.on('typing', function (msg) {
-            socket.broadcast.to(user.room).emit("message", {
-                users: getRoomUsers(user.room),
-                message: formatMessage(
-                    botName,
-                    `${user.username} is typing`
-                ),
-            });
-        });
+     
           
+        socket.on('typing', function(room) {
+            if (!socket.authenticated) {
+             return;
+            }
+          
+            socket.on("typing", function (msg) {
+                socket.broadcast.to(user.room).emit("message", {
+                    users: getRoomUsers(user.room),
+                    message: formatMessage(
+                        botName,
+                        `${user.username} is typing`
+                    )
+                });
+           });
+        });
 
         //welcome current user
         socket.emit("message", {
