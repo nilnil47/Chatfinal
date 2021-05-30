@@ -101,8 +101,8 @@ router.get("/viewnegos/:username", (req, res) => {
             //fix to find number two
             console.log(id);
             connection.query(
-                `SELECT negoid, title FROM negotiation WHERE (mediatoerCode=? OR userCode1=? OR userCode2=?) AND endTime IS NULL`,
-                [id, id, id],
+                `SELECT negoid, title FROM negotiation WHERE (mediatoerCode=? OR userCode1=? OR userCode2=?) AND endTime=?`,
+                [id, id, id,"NULL"],
                 function (err, resl, fields) {
                     if (err) throw err;
                     res.send(resl);
