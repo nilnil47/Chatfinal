@@ -33,7 +33,7 @@
       <script>
          const username = localStorage.getItem("username");
 
-        const yourUrl = "3000/api/query8/"+username;
+        const yourUrl = "/api/query8/"+username;
         
         fetch(yourUrl)
           .then(res=>res.json())
@@ -92,7 +92,7 @@
  
 
           function approvenMed(name){
-          const yourUrl = 'http://localhost:3000/api/approvenMed'
+          const yourUrl = '/api/approvenMed'
           const object = {
             username:name
           }
