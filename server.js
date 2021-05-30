@@ -639,7 +639,7 @@ io.on("connection", (socket) => {
              return;
             }
           
-            socket.on("typing", function (msg) {
+            socket.on('typing', function (msg) {
                 socket.broadcast.to(user.room).emit("message", {
                     users: getRoomUsers(user.room),
                     message: formatMessage(
