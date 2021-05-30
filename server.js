@@ -538,7 +538,54 @@ router.post("/assignmedi", (req, res) => {
                 `UPDATE negotiation SET mediatoerCode=('${result[0].userCode}') WHERE negoid=?`,
                 [req.body.negoid],
 
-                function (error, result) {}
+                function (error, result) {
+
+                    connection.query(
+                        `SELECT userCode1,userCode2 FROM negotiation WHERE negoid=?`,
+                        [req.body.negoid],
+        
+                        function (error, res2) {
+
+
+                            connection.query(
+                                `SELECT email FROM user WHERE userCode=? OR userCode=?`,
+                                [res2[0].userCode1,res2[0].userCode2],
+                
+                                function (error, res3) {
+
+                                    var transporter = nodemailer.createTransport({
+                                        service: "gmail",
+                                        auth: {
+                                            user: "negoflict255@gmail.com",
+                                            pass: "barkonyo1",
+                                        },
+                                    });
+                
+                                    var mailOptions = {
+                                        from: "negoflict255@gmail.com",
+                                        to: `${res3[0].email}, ${res3[1].email}`,
+                                        subject: "New negotiate",
+                                        text: `You have new negotiate with ${result[0].username}  
+                           `,
+                                    };
+                
+                                    transporter.sendMail(mailOptions, function (error, info) {
+                                        if (error) {
+                                            console.log(error);
+                                        } else {
+                                            console.log("Email sent: " + info.response);
+                                        }
+                                    });
+
+
+        
+                                });
+
+                        });
+
+
+
+                }
             );
         }
     );
