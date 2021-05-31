@@ -94,7 +94,7 @@
               
               if(xhr.responseText==="no")
             {
-                alert("you are not a mediator");
+                alert("You are not a mediator");
 
             }
             else{
@@ -116,13 +116,39 @@
               
             }
             function insti(){
+
+                const yourUrl = '/api/checkinsti';
+              const object1 = { //put here relavent
+ 
+ 
+ name:localStorage.getItem("username")
+
+}
+              var xhr = new XMLHttpRequest();
+              xhr.onload = function(){
+            if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+              
+              
+              if(xhr.responseText==="no") 
+            {
+                alert("You are not a mediator");
+
+            }
+            else{
+                window.open(`./writeinsight.html?negoid=`+negoid);          
+
+            }
+          
+            
+              }} 
+              xhr.open("POST", yourUrl, true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+              xhr.send(JSON.stringify(object1));
                 var params = new URLSearchParams(url.search);
               var negoid = params.get("negoid");
               console.log(negoid);
   
-              window.open(`./writeinsight.html?negoid=`+negoid);
-
-              
+          
               
             }
             </script>

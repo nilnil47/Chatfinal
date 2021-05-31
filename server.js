@@ -484,6 +484,18 @@ router.post("/endnego", (req, res) => {
 });
 
 
+router.post("/checkinsti", (req, res) => {
+    connection.query(
+        `SELECT userType
+        FROM user
+        WHERE username=?`,
+        [req.body.name],
+        function (error, result0) {
+            res.send("no");
+        }); 
+    });
+
+
 router.post("/addsummary", (req, res) => {
     connection.query(
         `UPDATE negotiation SET summary=? WHERE negoid=?`,
