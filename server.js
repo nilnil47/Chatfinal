@@ -473,7 +473,7 @@ router.post("/endnego", (req, res) => {
                     function (error, result) {}
                 );
             }
-            else{res.send("no");}
+            else{result0.send("no");}
         
         
         });
