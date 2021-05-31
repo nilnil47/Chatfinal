@@ -531,7 +531,7 @@ router.post("/addinsight", (req, res) => {
 
 router.post("/assignmedi", (req, res) => {
     connection.query(
-        `SELECT userCode FROM user WHERE username=?`,
+        `SELECT userCode, phone FROM user WHERE username=?`,
         [req.body.username],
         function (error, result) {
             connection.query(
@@ -548,11 +548,10 @@ router.post("/assignmedi", (req, res) => {
 
 
                             connection.query(
-                                `SELECT email FROM user WHERE userCode=? OR userCode=?`,
+                                `SELECT username, email FROM user WHERE userCode=? OR userCode=?`,
                                 [res2[0].userCode1,res2[0].userCode2],
                 
                                 function (error, res3) {
-                                    console.log(res3);
                                     
 
                                     var transporter = nodemailer.createTransport({
@@ -567,7 +566,7 @@ router.post("/assignmedi", (req, res) => {
                                         from: "negoflict255@gmail.com",
                                         to: `${res3[0].email}, ${res3[1].email}`,
                                         subject: "New negotiate",
-                                        text: `You have new negotiate with ${req.body.username}  
+                                        text: `Hello friend! You have new negotiate with the mediator ${req.body.username}. You should make an appointment as soon as possible with the mediator on the phone ${result[0].phone}. The negotiators are ${res3[0].username} and ${res3[1].username}
                            `,
                                     };
                 
