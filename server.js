@@ -531,9 +531,9 @@ router.post("/addinsight", (req, res) => {
 
 router.post("/assignmedi", (req, res) => {
     connection.query(
-        `SELECT userCode, phone FROM user WHERE username=?`,
+        `SELECT userCode,phone FROM user WHERE username=?`,
         [req.body.username],
-        function (error, result) {
+        function (error, result0) {
             connection.query(
                 `UPDATE negotiation SET mediatoerCode=('${result[0].userCode}') WHERE negoid=?`,
                 [req.body.negoid],
@@ -566,7 +566,7 @@ router.post("/assignmedi", (req, res) => {
                                         from: "negoflict255@gmail.com",
                                         to: `${res3[0].email}, ${res3[1].email}`,
                                         subject: "New negotiate",
-                                        text: `Hello friend! You have new negotiate with the mediator ${req.body.username}. You should make an appointment as soon as possible with the mediator on the phone ${result[0].phone}. The negotiators are ${res3[0].username} and ${res3[1].username}
+                                        text: `Hello friend! You have new negotiate with the mediator ${req.body.username}. You should make an appointment as soon as possible with the mediator on the phone ${result0[0].phone}. The negotiators are ${res3[0].username} and ${res3[1].username}
                            `,
                                     };
                 
