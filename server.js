@@ -369,11 +369,12 @@ router.get("/query3", (req, res) => {
 
 router.get("/query4", (req, res) => {
     connection.query(
-        `SELECT  negoid, title, description, startTime
+        `SELECT  negoid, title, description, startTime, userCode1, userCode2, mediatoerCode
          FROM negotiation
          WHERE endTime IS NULL
          ORDER BY startTime`,
         function (error, result) {
+
             console.log(JSON.stringify(result));
             res.send(result);
         }

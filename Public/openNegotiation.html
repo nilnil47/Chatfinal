@@ -47,6 +47,9 @@
               <th>Negotiation ID</th>
                <th>Title</th>
                <th>Description</th>
+               <th>Mediator</th>
+               <th>Negotiator 1</th>
+               <th>Negotiator 2</th>
                <th>Start time</th>
 
   
@@ -58,7 +61,7 @@
             
             var myarray = res;      
             myarray.forEach((obj,i) => {
-            let { negoid, title,description, startTime} = obj;
+            let { negoid, title,description, startTime, userCode1, userCode2, mediatoerCode} = obj;
             strHtml += /*html*/`
               
 <tr>
@@ -67,6 +70,10 @@
               <td>${title}</td>
               <td>${description}</td>
               <td>${startTime}</td>
+              <td>${userCode1}</td>
+              <td>${userCode2}</td>
+              <td>${mediatoerCode}</td>
+
 
 
             </tr>
