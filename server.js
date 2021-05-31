@@ -531,7 +531,7 @@ router.post("/addinsight", (req, res) => {
 
 router.post("/assignmedi", (req, res) => {
     connection.query(
-        `SELECT userCode,phone,email FROM user WHERE username=?`,
+        `SELECT userCode, phone FROM user WHERE username=?`,
         [req.body.username],
         function (error, result0) {
             connection.query(
@@ -552,9 +552,8 @@ router.post("/assignmedi", (req, res) => {
                                 [res2[0].userCode1,res2[0].userCode2],
                 
                                 function (error, res3) {
-                                    
                                     console.log(res3);
-                                    console.log(result0[0].phone);
+                                    
 
                                     var transporter = nodemailer.createTransport({
                                         service: "gmail",
