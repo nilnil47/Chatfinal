@@ -541,14 +541,14 @@ router.post("/assignmedi", (req, res) => {
                 function (error, result) {
 
                     connection.query(
-                        `SELECT userCode1,userCode2 FROM negotiation WHERE negoid=?`,
+                        `SELECT userCode1,userCode2,descriotion FROM negotiation WHERE negoid=?`,
                         [req.body.negoid],
         
                         function (error, res2) {
 
 
                             connection.query(
-                                `SELECT username, email FROM user WHERE userCode=? OR userCode=?`,
+                                `SELECT username, email, phone FROM user WHERE userCode=? OR userCode=?`,
                                 [res2[0].userCode1,res2[0].userCode2],
                 
                                 function (error, res3) {
@@ -566,12 +566,37 @@ router.post("/assignmedi", (req, res) => {
                                     var mailOptions = {
                                         from: "negoflict255@gmail.com",
                                         to: `${res3[0].email}, ${res3[1].email},${result0[0].email}`,
-                                        subject: "New negotiate",
-                                        text: `Hello friend! You have new negotiate with the mediator ${req.body.username}. You should make an appointment as soon as possible with the mediator on the phone ${result0[0].phone}. The negotiators are ${res3[0].username} and ${res3[1].username}
+                                        subject: "New negotiation",
+                                        text: `Hello friend! You have new negotiate with the mediator ${req.body.username}. You should make an appointment as soon as possible with the mediator on the phone ${res3[0].phone} and ${res3[1].phone}. The description of the negotiation is ${res2[0].description}
                            `,
                                     };
                 
                                     transporter.sendMail(mailOptions, function (error, info) {
+                                        if (error) {
+                                            console.log(error);
+                                        } else {
+                                            console.log("Email sent: " + info.response);
+                                        }
+                                    });
+
+
+                                    var transporter1 = nodemailer.createTransport({
+                                        service: "gmail",
+                                        auth: {
+                                            user: "negoflict255@gmail.com",
+                                            pass: "barkonyo1",
+                                        },
+                                    });
+                
+                                    var mailOptions1 = {
+                                        from: "negoflict255@gmail.com",
+                                        to: `${result0[0].email}`,
+                                        subject: "New negotiation",
+                                        text: `Hello friend! You have new negotiate with the negotiators ${res3[0].username} and ${res3[1].username}. You should make an appointment as soon as possible with the negotiators on the phone ${result0[0].phone}. 
+                           `,
+                                    };
+                
+                                    transporter1.sendMail(mailOptions1, function (error, info) {
                                         if (error) {
                                             console.log(error);
                                         } else {
