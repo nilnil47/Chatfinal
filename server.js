@@ -460,10 +460,21 @@ router.post("/approvenMed", (req, res) => {
 
 router.post("/endnego", (req, res) => {
     connection.query(
-        `UPDATE negotiation SET endTime=current_timestamp() WHERE negoid=?`,
-        [req.body.negoid],
-        function (error, result) {}
+        `SELECT userType
+        FROM user
+        WHERE username= ?`,
+        [req.body.name],
+        function (error, result0) {
+            if(result0[0].userType!="mediator")
+            {res.send("no");}
+            connection.query(
+                `UPDATE negotiation SET endTime=current_timestamp() WHERE negoid=?`,
+                [req.body.negoid],
+                function (error, result) {}
+            );
+        }
     );
+    
 });
 
 router.post("/addsummary", (req, res) => {
@@ -826,8 +837,6 @@ io.on("connection", (socket) => {
             msg.includes("dont") === true ||
             msg.includes("hate") === true ||
             msg.includes("angry") === true ||
-            msg.includes("!!!") === true ||
-            msg.includes("...") === true ||
             msg.includes("shut up") === true
         ) {
             io.to(user.id).emit("message", {

@@ -83,16 +83,24 @@
               const yourUrl = '/api/endnego';
               const object1 = { //put here relavent
  
- negoid:negoid
+ negoid:negoid,
+ name:localStorage.getItem("username")
 
 }
-              var xhr = new XMLHttpRequest();
-              xhr.open("POST", yourUrl, true);
-              xhr.setRequestHeader('Content-Type', 'application/json');
-              xhr.send(JSON.stringify(object1));
+            //   var xhr = new XMLHttpRequest();
+            //   xhr.open("POST", yourUrl, true);
+            //   xhr.setRequestHeader('Content-Type', 'application/json');
+            //   xhr.send(JSON.stringify(object1));
+               
+        fetch(yourUrl)
+          .then(res=>res.json())
+          .then((res) => {
+
+            if(res=="no")
+            alert("no");
+          });
             
         
-                console.log(negoid);
   
               window.location.href=`./fidbecnego.html?negoid=`+negoid;
 
