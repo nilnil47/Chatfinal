@@ -472,6 +472,7 @@ router.post("/endnego", (req, res) => {
                     [req.body.negoid],
                     function (error, result) {}
                 );
+                res.send("b");
             }
             else{res.send("no");}
         
