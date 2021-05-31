@@ -467,7 +467,7 @@ router.post("/endnego", (req, res) => {
         function (error, result0) {
             console.log("bar");
             if(result0[0].userType!="mediator")
-            {res.send("no");}});
+            {return;}});
             connection.query(
                 `UPDATE negotiation SET endTime=current_timestamp() WHERE negoid=?`,
                 [req.body.negoid],
