@@ -553,6 +553,7 @@ router.post("/assignmedi", (req, res) => {
                 
                                 function (error, res3) {
                                     console.log(res3);
+                                    
 
                                     var transporter = nodemailer.createTransport({
                                         service: "gmail",
@@ -566,7 +567,7 @@ router.post("/assignmedi", (req, res) => {
                                         from: "negoflict255@gmail.com",
                                         to: `${res3[0].email}, ${res3[1].email}`,
                                         subject: "New negotiate",
-                                        text: `You have new negotiate with ${result[0].username}  
+                                        text: `You have new negotiate with ${req.body.username}  
                            `,
                                     };
                 
