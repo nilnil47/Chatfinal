@@ -87,22 +87,16 @@
  name:localStorage.getItem("username")
 
 }
-            //   var xhr = new XMLHttpRequest();
-            //   xhr.open("POST", yourUrl, true);
-            //   xhr.setRequestHeader('Content-Type', 'application/json');
-            //   xhr.send(JSON.stringify(object1));
+              var xhr = new XMLHttpRequest();
+              xhr.open("POST", yourUrl, true);
+             xhr.setRequestHeader('Content-Type', 'application/json');
+              xhr.send(JSON.stringify(object1));
                
-        fetch(yourUrl)
-          .then(res=>res.json())
-          .then((res) => {
-
-            if(res=="no"){
-            alert("no");}
-          });
+       
             
         
   
-          //   window.location.href=`./fidbecnego.html?negoid=`+negoid;
+              window.location.href=`./fidbecnego.html?negoid=`+negoid;
 
               
               
