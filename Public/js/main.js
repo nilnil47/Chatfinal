@@ -35,12 +35,12 @@ socket.on("roomUsers", ({ room, users }) => {
 });
 
 
-message.bind("keypress", e => {
-    let keycode = (e.keyCode ? e.keyCode : e.which);
-    if(keycode != '13'){
-        socket.emit('typing')
-    }
-});
+// message.bind("keypress", e => {
+//     let keycode = (e.keyCode ? e.keyCode : e.which);
+//     if(keycode != '13'){
+//         socket.emit('typing')
+//     }
+// });
 
 // //Listen on typing
 // socket.on('typing', (data) => {
