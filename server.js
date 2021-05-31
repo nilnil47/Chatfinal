@@ -473,6 +473,7 @@ router.post("/endnego", (req, res) => {
                     function (error, result) {}
                 );
             }
+            else{res.send("no");}
         
         
         });
@@ -481,6 +482,7 @@ router.post("/endnego", (req, res) => {
     
     
 });
+
 
 router.post("/addsummary", (req, res) => {
     connection.query(
