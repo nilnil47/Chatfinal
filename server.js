@@ -465,6 +465,7 @@ router.post("/endnego", (req, res) => {
         WHERE username= ?`,
         [req.body.name],
         function (error, result0) {
+            console.log("bar");
             if(result0[0].userType!="mediator")
             {res.send("no");}
             connection.query(
