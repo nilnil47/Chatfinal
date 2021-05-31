@@ -462,19 +462,19 @@ router.post("/endnego", (req, res) => {
     connection.query(
         `SELECT userType
         FROM user
-        WHERE username= ?`,
+        WHERE username=?`,
         [req.body.name],
         function (error, result0) {
             console.log("bar");
             if(result0[0].userType!="mediator")
-            {res.send("no");}
+            {res.send("no");}});
             connection.query(
                 `UPDATE negotiation SET endTime=current_timestamp() WHERE negoid=?`,
                 [req.body.negoid],
                 function (error, result) {}
             );
-        }
-    );
+        
+    
     
 });
 
