@@ -823,7 +823,6 @@ io.on("connection", (socket) => {
 
         if (
             msg.includes("fuck") === true ||
-            msg.includes("no") === true ||
             msg.includes("dont") === true ||
             msg.includes("hate") === true ||
             msg.includes("angry") === true ||
@@ -835,7 +834,7 @@ io.on("connection", (socket) => {
                 users: getRoomUsers(user.room),
                 message: formatMessage(
                     botName,
-                    `Hi ${user.username}, you look little angry. for the negotiation will succed i hope you relax`
+                    `Hi ${user.username}, you look a little bit angry.For the success of the negotiation , please try to stay calm`
                 ),
             });
             //     console.log(user.id);
