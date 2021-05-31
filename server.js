@@ -492,9 +492,14 @@ router.post("/checkinsti", (req, res) => {
         WHERE username=?`,
         [req.body.name],
         function (error, result0) {
-            res.send("no");
+           if(result0[0].userType="mediator"){
+               res.send("b");}
+            else{
+                   res.send("no");
+               }
+           });
         }); 
-    });
+    
 
 
 router.post("/addsummary", (req, res) => {
