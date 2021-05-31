@@ -55,6 +55,8 @@ socket.on("message", ({ message }) => {
     //scroll down
     chatMessages.scrollTop = chatMessages.scrollHeight;
 });
+
+
 function onChatLoad() {
     console.log("hi");
     socket.emit("pageLoaded");
@@ -77,6 +79,23 @@ socket.on("privateMsgTo", ({ msg, isSender }) => {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
+const fallback = document.querySelector(".fallback");
+chatForm.addEventListener("keyup", () => {
+    socket.emit("typing", {
+      isTyping: chatForm.value.length > 0,
+      nick: user.username,
+    });
+  });
+  socket.on("typing", function (data) {
+    const { isTyping, nick } = data;
+  
+    if (!isTyping) {
+      fallback.innerHTML = "";
+      return;
+    }
+  
+    fallback.innerHTML = `<p>${nick} is typing...</p>`;
+  });
 //msg submit
 chatForm.addEventListener("submit", (e) => {
     e.preventDefault();

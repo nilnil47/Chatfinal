@@ -792,6 +792,18 @@ io.on("connection", (socket) => {
                 message: formatMessage(user.username, msg),
             }); //print everyone
         }
+        
+
+        socket.on("typing", function (data) {
+            socket.broadcast.emit("typing", data);
+          });
+        
+        //   socket.broadcast.to(user.room).emit("message", {
+        //     users: getRoomUsers(user.room),
+        //     message: formatMessage(
+        //         botName,
+        //         `${user.username} has joined the chat`
+        //     ),
 
         //Show someone writing
         // socket.on('typing', data => {
