@@ -226,7 +226,7 @@ router.post("/resetpassword", (req, res) => {
         from: "negoflict255@gmail.com",
         to: `${req.body.email}`,
         subject: "Reset your password in NegoFlict web",
-        text: "for reset your password click the next link http://localhost:3000/newpassword.html",
+        text: "for reset your password click the next link https://negoflictchat.herokuapp.com/newPassword.html",
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
