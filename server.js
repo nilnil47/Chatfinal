@@ -552,6 +552,7 @@ router.post("/assignmedi", (req, res) => {
                                 [res2[0].userCode1,res2[0].userCode2],
                 
                                 function (error, res3) {
+                                    console.log(res3);
 
                                     var transporter = nodemailer.createTransport({
                                         service: "gmail",
