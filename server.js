@@ -374,7 +374,6 @@ router.get("/query4", (req, res) => {
          WHERE endTime IS NULL
          ORDER BY startTime`,
         function (error, result) {
-
             console.log(JSON.stringify(result));
             res.send(result);
         }
@@ -438,7 +437,7 @@ router.get("/query8/:username", (req, res) => {
                 }
             );
         }
-    ); 
+    );
 });
 router.get("/query9", (req, res) => {
     connection.query(
@@ -465,25 +464,19 @@ router.post("/endnego", (req, res) => {
         WHERE username=?`,
         [req.body.name],
         function (error, result0) {
-            if(result0[0].userType=="mediator")
-            {
+            if (result0[0].userType == "mediator") {
                 connection.query(
                     `UPDATE negotiation SET endTime=current_timestamp() WHERE negoid=?`,
                     [req.body.negoid],
                     function (error, result) {}
                 );
                 res.send("b");
+            } else {
+                res.send("no");
             }
-            else{res.send("no");}
-        
-        
-        });
-            
-        
-    
-    
+        }
+    );
 });
-
 
 router.post("/checkinsti", (req, res) => {
     connection.query(
@@ -492,15 +485,14 @@ router.post("/checkinsti", (req, res) => {
         WHERE username=?`,
         [req.body.name],
         function (error, result0) {
-           if(result0[0].userType="mediator"){
-               res.send("b");}
-            else{
-                   res.send("no");
-               }
-           });
-        }); 
-    
-
+            if ((result0[0].userType = "mediator")) {
+                res.send("b");
+            } else {
+                res.send("no");
+            }
+        }
+    );
+});
 
 router.post("/addsummary", (req, res) => {
     connection.query(
@@ -576,30 +568,27 @@ router.post("/assignmedi", (req, res) => {
                 [req.body.negoid],
 
                 function (error, result) {
-
                     connection.query(
                         `SELECT userCode1,userCode2,description FROM negotiation WHERE negoid=?`,
                         [req.body.negoid],
-        
+
                         function (error, res2) {
-
-
                             connection.query(
                                 `SELECT username, email, phone FROM user WHERE userCode=? OR userCode=?`,
-                                [res2[0].userCode1,res2[0].userCode2],
-                
+                                [res2[0].userCode1, res2[0].userCode2],
+
                                 function (error, res3) {
                                     console.log(res3);
-                                    
 
-                                    var transporter = nodemailer.createTransport({
-                                        service: "gmail",
-                                        auth: {
-                                            user: "negoflict255@gmail.com",
-                                            pass: "barkonyo1",
-                                        },
-                                    });
-                
+                                    var transporter =
+                                        nodemailer.createTransport({
+                                            service: "gmail",
+                                            auth: {
+                                                user: "negoflict255@gmail.com",
+                                                pass: "barkonyo1",
+                                            },
+                                        });
+
                                     var mailOptions = {
                                         from: "negoflict255@gmail.com",
                                         to: `${res3[0].email}, ${res3[1].email}`,
@@ -607,24 +596,30 @@ router.post("/assignmedi", (req, res) => {
                                         text: `Hello friend! You have new negotiate with the mediator ${req.body.username}. You should make an appointment as soon as possible with the mediator on the phone ${result0[0].phone}.
                            `,
                                     };
-                
-                                    transporter.sendMail(mailOptions, function (error, info) {
-                                        if (error) {
-                                            console.log(error);
-                                        } else {
-                                            console.log("Email sent: " + info.response);
+
+                                    transporter.sendMail(
+                                        mailOptions,
+                                        function (error, info) {
+                                            if (error) {
+                                                console.log(error);
+                                            } else {
+                                                console.log(
+                                                    "Email sent: " +
+                                                        info.response
+                                                );
+                                            }
                                         }
-                                    });
+                                    );
 
+                                    var transporter1 =
+                                        nodemailer.createTransport({
+                                            service: "gmail",
+                                            auth: {
+                                                user: "negoflict255@gmail.com",
+                                                pass: "barkonyo1",
+                                            },
+                                        });
 
-                                    var transporter1 = nodemailer.createTransport({
-                                        service: "gmail",
-                                        auth: {
-                                            user: "negoflict255@gmail.com",
-                                            pass: "barkonyo1",
-                                        },
-                                    });
-                
                                     var mailOptions1 = {
                                         from: "negoflict255@gmail.com",
                                         to: `${result0[0].email}`,
@@ -632,23 +627,24 @@ router.post("/assignmedi", (req, res) => {
                                         text: `Hello friend! You have new negotiate with the negotiators ${res3[0].username} and ${res3[1].username}. You should make an appointment as soon as possible with the negotiators on the phone${res3[0].phone} and ${res3[1].phone} . The description of the negotiation is ${res2[0].description}. 
                            `,
                                     };
-                
-                                    transporter1.sendMail(mailOptions1, function (error, info) {
-                                        if (error) {
-                                            console.log(error);
-                                        } else {
-                                            console.log("Email sent: " + info.response);
+
+                                    transporter1.sendMail(
+                                        mailOptions1,
+                                        function (error, info) {
+                                            if (error) {
+                                                console.log(error);
+                                            } else {
+                                                console.log(
+                                                    "Email sent: " +
+                                                        info.response
+                                                );
+                                            }
                                         }
-                                    });
-
-
-        
-                                });
-
-                        });
-
-
-
+                                    );
+                                }
+                            );
+                        }
+                    );
                 }
             );
         }
@@ -735,101 +731,103 @@ router.post("/newnegotiation", (req, res) => {
     );
 });
 
-
 router.post("/newnegotiationmedi", (req, res) => {
     var id1, id2;
     connection.query(
         "SELECT userCode, email,phone FROM user WHERE username = ?",
         [req.body.name1],
-         function (error, results) {
-            
+        function (error, results) {
             connection.query(
                 "SELECT userCode,username, email, phone FROM user WHERE phone = ? OR phone=?",
                 [req.body.phone_user1, req.body.phone_user2],
-                function(err,res){
+                function (err, res) {
                     connection.query(
                         `INSERT INTO negotiation (usercode1,usercode2,mediatoerCode,title, description) VALUES
         ('${res[0].userCode}','${res[1].userCode}','${results[0].userCode}','${req.body.title}','${req.body.description}')`,
                         function (error, result) {
-                                    var transporter = nodemailer.createTransport({
-                                        service: "gmail",
-                                        auth: {
-                                            user: "negoflict255@gmail.com",
-                                            pass: "barkonyo1",
-                                        },
-                                    });
-                
-                                    var mailOptions = {
-                                        from: "negoflict255@gmail.com",
-                                        to: `${res[0].email}, ${res[1].email}`,
-                                        subject: "New negotiation",
-                                        text: `Hello friend! You have new negotiate with the mediator ${req.body.name1}. You should make an appointment as soon as possible with the mediator on the phone ${results[0].phone}.
+                            var transporter = nodemailer.createTransport({
+                                service: "gmail",
+                                auth: {
+                                    user: "negoflict255@gmail.com",
+                                    pass: "barkonyo1",
+                                },
+                            });
+
+                            var mailOptions = {
+                                from: "negoflict255@gmail.com",
+                                to: `${res[0].email}, ${res[1].email}`,
+                                subject: "New negotiation",
+                                text: `Hello friend! You have new negotiate with the mediator ${req.body.name1}. You should make an appointment as soon as possible with the mediator on the phone ${results[0].phone}.
                            `,
-                                    };
-                
-                                    transporter.sendMail(mailOptions, function (error, info) {
-                                        if (error) {
-                                            console.log(error);
-                                        } else {
-                                            console.log("Email sent: " + info.response);
-                                        }
-                                    });
+                            };
 
+                            transporter.sendMail(
+                                mailOptions,
+                                function (error, info) {
+                                    if (error) {
+                                        console.log(error);
+                                    } else {
+                                        console.log(
+                                            "Email sent: " + info.response
+                                        );
+                                    }
+                                }
+                            );
 
-                                    var transporter1 = nodemailer.createTransport({
-                                        service: "gmail",
-                                        auth: {
-                                            user: "negoflict255@gmail.com",
-                                            pass: "barkonyo1",
-                                        },
-                                    });
-                
-                                    var mailOptions1 = {
-                                        from: "negoflict255@gmail.com",
-                                        to: `${results[0].email}`,
-                                        subject: "New negotiation",
-                                        text: `Hello friend! You have new negotiate with the negotiators ${res[0].username} and ${res[1].username}. You should make an appointment as soon as possible with the negotiators on the phone${res[0].phone} and ${res[1].phone} . The description of the negotiation is ${req.body.description}. 
+                            var transporter1 = nodemailer.createTransport({
+                                service: "gmail",
+                                auth: {
+                                    user: "negoflict255@gmail.com",
+                                    pass: "barkonyo1",
+                                },
+                            });
+
+                            var mailOptions1 = {
+                                from: "negoflict255@gmail.com",
+                                to: `${results[0].email}`,
+                                subject: "New negotiation",
+                                text: `Hello friend! You have new negotiate with the negotiators ${res[0].username} and ${res[1].username}. You should make an appointment as soon as possible with the negotiators on the phone${res[0].phone} and ${res[1].phone} . The description of the negotiation is ${req.body.description}. 
                            `,
-                                    };
-                
-                                    transporter1.sendMail(mailOptions1, function (error, info) {
-                                        if (error) {
-                                            console.log(error);
-                                        } else {
-                                            console.log("Email sent: " + info.response);
-                                        }
-                                    });
+                            };
 
-
-
-
-                            
-                        });
-                });
-                
-
-                
-
-
-
-            });
-
-
-
-            
+                            transporter1.sendMail(
+                                mailOptions1,
+                                function (error, info) {
+                                    if (error) {
+                                        console.log(error);
+                                    } else {
+                                        console.log(
+                                            "Email sent: " + info.response
+                                        );
+                                    }
+                                }
+                            );
+                        }
+                    );
+                }
+            );
+        }
+    );
 });
 
 const botName = "Nego Bot";
 
 //Run when client connect
 io.on("connection", (socket) => {
+    var onevent = socket.onevent;
+    socket.onevent = function (packet) {
+        var args = packet.data || [];
+        onevent.call(this, packet); // original call
+        packet.data = ["*"].concat(args);
+        onevent.call(this, packet); // additional call to catch-all
+    };
+    socket.on("*", function (event, data) {
+        console.log(event);
+        console.log(data);
+    });
     socket.on("joinRoom", ({ username, room }) => {
         const user = userJoin(socket.id, username, room);
         socket.join(user.room);
-        
-     
-          
-       
 
         //welcome current user
         socket.emit("message", {
@@ -878,6 +876,21 @@ io.on("connection", (socket) => {
             room: user.room,
             users: getRoomUsers(user.room),
         });
+
+        ///ISTYPING SOCKETS
+        socket.on("startTyping", function () {
+            console.log("isTyping", user.room);
+            socket.broadcast
+                .to(user.room)
+                .emit("isTyping", { user, typing: true });
+        });
+
+        socket.on("stopTyiping", function () {
+            console.log("isNotTyping", user.room);
+            socket.broadcast
+                .to(user.room)
+                .emit("isNotTyping", { user, typing: false });
+        });
     });
     // console.log('New Ws connection...');  //when we reload the page we have msg on the traminal that new ws is created
 
@@ -885,7 +898,6 @@ io.on("connection", (socket) => {
 
     //listen for chatMsg
     socket.on("chatMessage", ({ msg, privateMsgTo }) => {
-
         const user = getCurrentUser(socket.id);
         var users = getRoomUsers(user.room);
         console.log(
@@ -913,19 +925,12 @@ io.on("connection", (socket) => {
                 message: formatMessage(user.username, msg),
             }); //print everyone
         }
-        
-
-        // socket.on("typing", function (data) {
-        //     socket.broadcast.emit("typing", data);
-        //   });
-        
 
         //save the msg in database
         connection.query(
             `SELECT userCode FROM user WHERE username=?`,
             [user.username],
             function (err, res) {
-                
                 connection.query(
                     `SELECT negoid FROM negotiation WHERE title=?`,
                     [user.room],
@@ -970,9 +975,6 @@ io.on("connection", (socket) => {
             //     });
         }
     });
-
-
-  
 
     //listen for chat page load
     socket.on("pageLoaded", () => {

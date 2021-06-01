@@ -77,51 +77,62 @@ socket.on("privateMsgTo", ({ msg, isSender }) => {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 });
 
-// const fallback = document.querySelector(".fallback");
-// chatForm.addEventListener("keyup", () => {
-//     socket.emit("typing", {
-//       isTyping: chatForm.value.length > 0,
-//       nick: user.username,
-//     });
-//   });
-//   socket.on("typing", function (data) {
-//     const { isTyping, nick } = data;
+//////////////TYPING SOCKET START
+const inputEl = document.getElementById("msg");
 
-//     if (!isTyping) {
-//       fallback.innerHTML = "";
-//       return;
-//     }
-
-//     fallback.innerHTML = `<p>${nick} is typing...</p>`;
-//   });
-
-chatForm.addEventListener("keyUp", (e) => {
-    console.log(e)
-/***
-     * .keypress((e)=>{
-    if(e.which!=13){
-        typing=true
-        socket.emit('typing', {user:user, typing:true})
-        clearTimeout(timeout)
-        timeout=setTimeout(typingTimeout, 3000)
-    }else{
-        clearTimeout(timeout)
-        typingTimeout()
-        //sendMessage() function will be called once the user hits enter
-        sendMessage()
+var timeout = null;
+var typing = false;
+inputEl.addEventListener("keypress", (e) => {
+    if (e.keyCode != 13) {
+        onKeyDownNotEnter();
     }
-    })
-
-    //code explained later
-    socket.on('display', (data)=>{
-    if(data.typing==true)
-        $('.typing').text(`${data.user} is typing...`)
-    else
-        $('.typing').text("")
-    })
-*/
 });
 
+function timeoutFunction() {
+    typing = false;
+    console.log("🚀 ~ file: main.js ~ line 99 ~ timeoutFunction ~ stopTyiping");
+    socket.emit("stopTyiping");
+}
+
+function onKeyDownNotEnter() {
+    if (typing == false) {
+        typing = true;
+        socket.emit("startTyping");
+        console.log(
+            "🚀 ~ file: main.js ~ line 101 ~ onKeyDownNotEnter ~ startTyping"
+        );
+        timeout = setTimeout(timeoutFunction, 1000);
+    } else {
+        clearTimeout(timeout);
+        timeout = setTimeout(timeoutFunction, 1000);
+    }
+}
+
+function setUserElLi(typing, user) {
+    const isTypingEl = document.querySelector(`li[data-user-id="${user.id}"] .is-typing`);
+    console.log(
+        "🚀 ~ file: main.js ~ line 113 ~ socket.on ~ isTypingEl",
+        isTypingEl
+    );
+    isTypingEl.innerHTML=typing?'typing':''
+}
+socket.on("isTyping", ({ typing, user }) => {
+    setUserElLi(typing, user);
+    console.log(
+        "🚀 ~ file: main.js ~ line 111 ~ socket.on ~ typing",
+        user,
+        typing
+    );
+});
+socket.on("isNotTyping", ({ typing, user }) => {
+    setUserElLi(typing, user);
+    console.log(
+        "🚀 ~ file: main.js ~ line 114 ~ socket.on ~ typing",
+        user,
+        typing
+    );
+});
+//////////////////TYPING SOCKET END
 //msg submit
 chatForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -194,7 +205,12 @@ function showList(users) {
 //Add users to dom
 function outputUsers(users) {
     userList.innerHTML = `
-    ${users.map((user) => `<li>${user.username}</li>`).join("")}
+    ${users
+        .map(
+            (user) =>
+                `<li data-user-id="${user.id}">${user.username}<span class="is-typing"></span></li>`
+        )
+        .join("")}
     `;
 }
 
