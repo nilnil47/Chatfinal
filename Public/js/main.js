@@ -34,23 +34,10 @@ socket.on("roomUsers", ({ room, users }) => {
     outputUsers(users);
 });
 
-// message.bind("keypress", e => {
-//     let keycode = (e.keyCode ? e.keyCode : e.which);
-//     if(keycode != '13'){
-//         socket.emit('typing')
-//     }
-// });
-
-// //Listen on typing
-// socket.on('typing', (data) => {
-//     const message=data.username + " is typing a message...";
-//     outputMessage(message)
-// });
-
 //message from server
-socket.on("message", ({ message }) => {
-    console.log(message, users); //print the msg from server welcome to nego and the other msgss
-    if (message) outputMessage(message);
+socket.on("message", ({ message, isSender, user }) => {
+    console.log(message, user, isSender); //print the msg from server welcome to nego and the other msgss
+    if (message) outputMessage(message, null, null);
     //scroll down
     chatMessages.scrollTop = chatMessages.scrollHeight;
 });
@@ -65,14 +52,14 @@ socket.on("pageLoad", ({ users }) => {
     //scroll down
     chatMessages.scrollTop = chatMessages.scrollHeight;
 });
-socket.on("privateMsgTo", ({ msg, isSender }) => {
-    console.log(
-        "🚀 ~ file: main.js ~ line 55 ~ socket.on ~ msg,isSender ",
+socket.on("privateMsgTo", ({ msg, isSender, user }) => {
+    console.log("🚀 ~ file: main.js ~ line 55 ~ socket.on ~ msg,isSender ", {
         msg,
-        isSender
-    );
+        isSender,
+        user,
+    });
 
-    if (msg) outputMessage(msg, isSender);
+    if (msg) outputMessage(msg, isSender, user);
     //scroll down
     chatMessages.scrollTop = chatMessages.scrollHeight;
 });
@@ -109,12 +96,14 @@ function onKeyDownNotEnter() {
 }
 
 function setUserElLi(typing, user) {
-    const isTypingEl = document.querySelector(`li[data-user-id="${user.id}"] .is-typing`);
+    const isTypingEl = document.querySelector(
+        `li[data-user-id="${user.id}"] .is-typing`
+    );
     console.log(
         "🚀 ~ file: main.js ~ line 113 ~ socket.on ~ isTypingEl",
         isTypingEl
     );
-    isTypingEl.innerHTML=typing?'typing':''
+    isTypingEl.innerHTML = typing ? "typing" : "";
 }
 socket.on("isTyping", ({ typing, user }) => {
     setUserElLi(typing, user);
@@ -160,25 +149,28 @@ const listener = (eventName, ...args) => {
 socket.onAny(listener);
 
 //output message to Dom
-function outputMessage(message, isSender = null) {
+function outputMessage(msg, isSender = null, user = null) {
+    console.log({ msg, user, isSender });
     const div = document.createElement("div");
     div.classList.add("message"); //add class messege
     const privateMsgTo = document.getElementById("userof").value;
+    var privateMsgFormat = "";
+    if (isSender === null) {
+        privateMsgFormat = "";
+    } else {
+        privateMsgFormat = isSender
+            ? "Private message to " + user.username + ":"
+            : "Private message from " + user.username + ":";
+    }
 
-    div.innerHTML = `<p class="meta">${message.username} <span>${
-        message.time
-    }</span></p>
+    div.innerHTML = `
+    <p class="meta">
+        <sapn>${msg.username}</span> 
+        <span>${msg.time}</span>
+    </p>    
     <p class="text">
-    
-        ${
-            isSender === null
-                ? ""
-                : "Private message to " +
-                  document.getElementById("userof").options[
-                      document.getElementById("userof").selectedIndex
-                  ].text +
-                  ":"
-        }${message.text}
+        ${isSender !== null ? privateMsgFormat : ""}
+        ${msg.text}
     </p>`;
     document.querySelector(".chat-messages").appendChild(div);
 }

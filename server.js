@@ -913,11 +913,13 @@ io.on("connection", (socket) => {
             io.to(privateMsgTo).emit("privateMsgTo", {
                 msg: formatMessage(user.username, msg),
                 isSender: false,
+                user,
             });
             // the sender
             io.to(user.id).emit("privateMsgTo", {
                 msg: formatMessage(user.username, msg),
                 isSender: true,
+                user: recipient,
             });
         } else {
             if (!user.room) return console.error(user, "no room?");
