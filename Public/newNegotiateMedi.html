@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+      integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>New Negotiation</title>
+  </head>
+
+  <script>
+    function submit(){
+      const yourUrl = '/api/newnegotiationmedi'
+      const object = {
+        name1:localStorage.getItem('username'),
+        title:document.getElementById("title").value,
+        phone_user1:document.getElementById("phone1").value,
+        phone_user2:document.getElementById("phone2").value,
+        description:document.getElementById("description").value
+     
+
+
+      }
+
+     
+
+      console.log(object);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", yourUrl, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify(object));
+      alert("The request has been sent");
+      window.location.href="mediatorPage.html"
+
+    }
+    </script>
+  <body>
+    <div style="display: flex; justify-content: center">
+      
+    </div>
+    <div class="join-container">
+      <header class="join-header">
+        <h1 ><i><img src="https://scontent.ftlv5-1.fna.fbcdn.net/v/t1.6435-9/155379338_3912200072134580_7295162422057122146_n.jpg?_nc_cat=102&_nc_map=test-rt&ccb=1-3&_nc_sid=730e14&_nc_ohc=ci1YXJ2WmCgAX-JmapW&_nc_ht=scontent.ftlv5-1.fna&oh=ced579c41d07ceec0110cb82840997b3&oe=60C2DE73" 
+        width="80" height="90" alt="webmaster logo" /></i> Create a new negotiation</h1>
+      </header>
+      <main class="join-main">
+          <div class="form-control">
+            <label for="Title">Negotiation title</label>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              placeholder="Enter negotiation title..."
+              required
+            />
+          </div>
+         
+
+          
+          <div class="form-control">
+            <label for="mail">Enter negotiator 1 phone number</label>
+            <input
+              type="text1"
+              name="phone1"
+              id="phone1"
+              placeholder="Enter phone number..."
+              required
+            />
+          </div>
+          <div class="form-control">
+            <label for="mail">Enter negotiator 2 partner phone number</label>
+            <input
+              type="text"
+              name="phone2"
+              id="phone2"
+              placeholder="Enter phone number..."
+              required
+            />
+          </div>
+          <div class="form-control">
+          <textarea placeholder="Enter negotiation description..." style=color:black  rows="8" cols="57" class="join-container" title="description"  id="description" name="options[8]"></textarea>
+        </div>
+        <div class="form-control ">
+          <form action="/action_page.php">
+              <input type="file" id="myFile" name="filename" style="color:black">
+              <input type="submit">
+            </form>
+        </div>
+        <button type="submit" onclick="submit()" class="btn">Create negotiation</button></a>
+
+         
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

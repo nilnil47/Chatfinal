@@ -735,6 +735,30 @@ router.post("/newnegotiation", (req, res) => {
     );
 });
 
+
+router.post("/newnegotiationmedi", (req, res) => {
+    var id1, id2;
+    connection.query(
+        "SELECT userCode FROM user WHERE username = ?",
+        [req.body.name1],
+         function (error, results) {
+            
+            connection.query(
+                "SELECT userCode FROM user WHERE phone = ?, phone=?",
+                [req.body.phone_user1, req.body.phone_user2],
+                function(err,res){
+                    connection.query(
+                        `INSERT INTO negotiation (usercode1,usercode2,mediatoerCode,description) VALUES
+        ('${res[0].phone}','${res[1].phone}','${results[0].userCode}','${req.body.title}','${req.body.description}')`,
+                        function (error, result) {}
+                    );
+                });
+                
+            });
+
+            
+});
+
 const botName = "Nego Bot";
 
 //Run when client connect
