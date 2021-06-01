@@ -744,7 +744,7 @@ router.post("/newnegotiationmedi", (req, res) => {
          function (error, results) {
             
             connection.query(
-                "SELECT userCode, email, phone FROM user WHERE phone = ? OR phone=?",
+                "SELECT userCode,username, email, phone FROM user WHERE phone = ? OR phone=?",
                 [req.body.phone_user1, req.body.phone_user2],
                 function(err,res){
                     connection.query(
