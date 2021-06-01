@@ -34,7 +34,6 @@ socket.on("roomUsers", ({ room, users }) => {
     outputUsers(users);
 });
 
-
 // message.bind("keypress", e => {
 //     let keycode = (e.keyCode ? e.keyCode : e.which);
 //     if(keycode != '13'){
@@ -55,7 +54,6 @@ socket.on("message", ({ message }) => {
     //scroll down
     chatMessages.scrollTop = chatMessages.scrollHeight;
 });
-
 
 function onChatLoad() {
     console.log("hi");
@@ -88,14 +86,42 @@ socket.on("privateMsgTo", ({ msg, isSender }) => {
 //   });
 //   socket.on("typing", function (data) {
 //     const { isTyping, nick } = data;
-  
+
 //     if (!isTyping) {
 //       fallback.innerHTML = "";
 //       return;
 //     }
-  
+
 //     fallback.innerHTML = `<p>${nick} is typing...</p>`;
 //   });
+
+chatForm.addEventListener("keyUp", (e) => {
+    console.log(e)
+/***
+     * .keypress((e)=>{
+    if(e.which!=13){
+        typing=true
+        socket.emit('typing', {user:user, typing:true})
+        clearTimeout(timeout)
+        timeout=setTimeout(typingTimeout, 3000)
+    }else{
+        clearTimeout(timeout)
+        typingTimeout()
+        //sendMessage() function will be called once the user hits enter
+        sendMessage()
+    }
+    })
+
+    //code explained later
+    socket.on('display', (data)=>{
+    if(data.typing==true)
+        $('.typing').text(`${data.user} is typing...`)
+    else
+        $('.typing').text("")
+    })
+*/
+});
+
 //msg submit
 chatForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -130,13 +156,18 @@ function outputMessage(message, isSender = null) {
 
     div.innerHTML = `<p class="meta">${message.username} <span>${
         message.time
-        
     }</span></p>
     <p class="text">
     
-        ${isSender === null ? "" : "Private message to "+document.getElementById("userof").options[document.getElementById("userof").selectedIndex].text+":" }${
-        message.text
-    }
+        ${
+            isSender === null
+                ? ""
+                : "Private message to " +
+                  document.getElementById("userof").options[
+                      document.getElementById("userof").selectedIndex
+                  ].text +
+                  ":"
+        }${message.text}
     </p>`;
     document.querySelector(".chat-messages").appendChild(div);
 }
