@@ -739,23 +739,82 @@ router.post("/newnegotiation", (req, res) => {
 router.post("/newnegotiationmedi", (req, res) => {
     var id1, id2;
     connection.query(
-        "SELECT userCode FROM user WHERE username = ?",
+        "SELECT userCode, email,phone FROM user WHERE username = ?",
         [req.body.name1],
          function (error, results) {
             
             connection.query(
-                "SELECT userCode FROM user WHERE phone = ? OR phone=?",
+                "SELECT userCode, email, phone FROM user WHERE phone = ? OR phone=?",
                 [req.body.phone_user1, req.body.phone_user2],
                 function(err,res){
                     connection.query(
                         `INSERT INTO negotiation (usercode1,usercode2,mediatoerCode,title, description) VALUES
         ('${res[0].userCode}','${res[1].userCode}','${results[0].userCode}','${req.body.title}','${req.body.description}')`,
-                        function (error, result) {console.log(result);
-                        }
-                    );
+                        function (error, result) {
+                                    var transporter = nodemailer.createTransport({
+                                        service: "gmail",
+                                        auth: {
+                                            user: "negoflict255@gmail.com",
+                                            pass: "barkonyo1",
+                                        },
+                                    });
+                
+                                    var mailOptions = {
+                                        from: "negoflict255@gmail.com",
+                                        to: `${res[0].email}, ${res[1].email}`,
+                                        subject: "New negotiation",
+                                        text: `Hello friend! You have new negotiate with the mediator ${req.body.name1}. You should make an appointment as soon as possible with the mediator on the phone ${req.body.description}.
+                           `,
+                                    };
+                
+                                    transporter.sendMail(mailOptions, function (error, info) {
+                                        if (error) {
+                                            console.log(error);
+                                        } else {
+                                            console.log("Email sent: " + info.response);
+                                        }
+                                    });
+
+
+                                    var transporter1 = nodemailer.createTransport({
+                                        service: "gmail",
+                                        auth: {
+                                            user: "negoflict255@gmail.com",
+                                            pass: "barkonyo1",
+                                        },
+                                    });
+                
+                                    var mailOptions1 = {
+                                        from: "negoflict255@gmail.com",
+                                        to: `${results[0].email}`,
+                                        subject: "New negotiation",
+                                        text: `Hello friend! You have new negotiate with the negotiators ${res[0].username} and ${res[1].username}. You should make an appointment as soon as possible with the negotiators on the phone${res[0].phone} and ${res[1].phone} . The description of the negotiation is ${res2[0].description}. 
+                           `,
+                                    };
+                
+                                    transporter1.sendMail(mailOptions1, function (error, info) {
+                                        if (error) {
+                                            console.log(error);
+                                        } else {
+                                            console.log("Email sent: " + info.response);
+                                        }
+                                    });
+
+
+
+
+                            
+                        });
                 });
                 
+
+                
+
+
+
             });
+
+
 
             
 });
