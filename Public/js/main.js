@@ -130,7 +130,7 @@ function outputMessage(message, isSender = null) {
         message.time
     }</span></p>
     <p class="text">
-        ${isSender === null ? "" : "Private message"}${
+        ${isSender === null ? "" : "Private message from "+ message.username+"to"+privateMsgTo }${
         message.text
     }
     </p>`;
