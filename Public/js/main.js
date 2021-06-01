@@ -133,7 +133,7 @@ function outputMessage(message, isSender = null) {
     }</span></p>
     <p class="text">
     
-        ${isSender === null ? "" : "Private message from "+ message.username+" to "+document.getElementById("userof").options[document.getElementById("userof").selectedIndex].text+":" }${
+        ${isSender === null ? "" : "Private message to "+document.getElementById("userof").options[document.getElementById("userof").selectedIndex].text+":" }${
         message.text
     }
     </p>`;
