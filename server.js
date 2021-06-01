@@ -814,6 +814,7 @@ const botName = "Nego Bot";
 
 //Run when client connect
 io.on("connection", (socket) => {
+    
     var onevent = socket.onevent;
     socket.onevent = function (packet) {
         var args = packet.data || [];
@@ -825,6 +826,7 @@ io.on("connection", (socket) => {
         console.log(event);
         console.log(data);
     });
+
     socket.on("joinRoom", ({ username, room }) => {
         const user = userJoin(socket.id, username, room);
         socket.join(user.room);
