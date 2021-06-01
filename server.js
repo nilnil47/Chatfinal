@@ -749,8 +749,9 @@ router.post("/newnegotiationmedi", (req, res) => {
                 function(err,res){
                     connection.query(
                         `INSERT INTO negotiation (usercode1,usercode2,mediatoerCode,description) VALUES
-        ('${res[0].phone}','${res[1].phone}','${results[0].userCode}','${req.body.title}','${req.body.description}')`,
-                        function (error, result) {}
+        ('${res[0].userCode}','${res[1].userCode}','${results[0].userCode}','${req.body.title}','${req.body.description}')`,
+                        function (error, result) {console.log(res);
+                        }
                     );
                 });
                 
