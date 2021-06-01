@@ -126,11 +126,14 @@ socket.onAny(listener);
 function outputMessage(message, isSender = null) {
     const div = document.createElement("div");
     div.classList.add("message"); //add class messege
+    const recipent1=document.getElementById("userof").options[document.getElementById("userof").selectedIndex].text;
     div.innerHTML = `<p class="meta">${message.username} <span>${
         message.time
+        
     }</span></p>
     <p class="text">
-        ${isSender === null ? "" : "Private message from "+ message.username+" to "+ document.getElementById("userof").options[document.getElementById("userof").selectedIndex].text+":" }${
+    
+        ${isSender === null ? "" : "Private message from "+ message.username+" to "+recipent1+":" }${
         message.text
     }
     </p>`;
