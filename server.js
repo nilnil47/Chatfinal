@@ -763,7 +763,7 @@ router.post("/newnegotiationmedi", (req, res) => {
                                         from: "negoflict255@gmail.com",
                                         to: `${res[0].email}, ${res[1].email}`,
                                         subject: "New negotiation",
-                                        text: `Hello friend! You have new negotiate with the mediator ${req.body.name1}. You should make an appointment as soon as possible with the mediator on the phone ${req.body.description}.
+                                        text: `Hello friend! You have new negotiate with the mediator ${req.body.name1}. You should make an appointment as soon as possible with the mediator on the phone ${results[0].phone}.
                            `,
                                     };
                 
@@ -788,7 +788,7 @@ router.post("/newnegotiationmedi", (req, res) => {
                                         from: "negoflict255@gmail.com",
                                         to: `${results[0].email}`,
                                         subject: "New negotiation",
-                                        text: `Hello friend! You have new negotiate with the negotiators ${res[0].username} and ${res[1].username}. You should make an appointment as soon as possible with the negotiators on the phone${res[0].phone} and ${res[1].phone} . The description of the negotiation is ${res2[0].description}. 
+                                        text: `Hello friend! You have new negotiate with the negotiators ${res[0].username} and ${res[1].username}. You should make an appointment as soon as possible with the negotiators on the phone${res[0].phone} and ${res[1].phone} . The description of the negotiation is ${req.body.description}. 
                            `,
                                     };
                 
