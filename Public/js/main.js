@@ -103,7 +103,7 @@ function setUserElLi(typing, user) {
         "🚀 ~ file: main.js ~ line 113 ~ socket.on ~ isTypingEl",
         isTypingEl
     );
-    isTypingEl.innerHTML = typing ? "typing" : "";
+    isTypingEl.innerHTML = typing ? ".....typing" : "";
 }
 socket.on("isTyping", ({ typing, user }) => {
     setUserElLi(typing, user);
