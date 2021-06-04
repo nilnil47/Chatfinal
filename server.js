@@ -838,29 +838,33 @@ io.on("connection", (socket) => {
         }); //for personal
 
             const history = [];
+            connection.query(`SELECT negoid FROM negotiation WHERE title=?`,
+            [user.room],function(err,res){
 
             connection.query(
-                `SELECT content,userCode FROM message WHERE negoid=?`,
-                [100],
-                function (err, res1) {
-                    res1.forEach((msg) => {
-                        connection.query(
-                            `SELECT username FROM user WHERE userCode=?`,
-                            [msg.userCode],
-                            function (err, res2) {
-                                console.log(msg);
-                                socket.emit("message", msg.content);
-                                io.to(user.room).emit("message", {
-                                    message: formatMessage(
-                                        res2[0].username,
-                                        msg.content
-                                    ),
+                            `SELECT content,userCode FROM message WHERE negoid=?`,
+                            [res[0].negoid],
+                            function (err, res1) {
+                                res1.forEach((msg) => {
+                                    connection.query(
+                                        `SELECT username FROM user WHERE userCode=?`,
+                                        [msg.userCode],
+                                        function (err, res2) {
+                                            console.log(msg);
+                                            socket.emit("message", msg.content);
+                                            io.to(user.room).emit("message", {
+                                                message: formatMessage(
+                                                    res2[0].username,
+                                                    msg.content
+                                                ),
+                                            });
+                                        }
+                                    );
                                 });
                             }
-                        );
-                    });
-                }
+                        );}
             );
+            
         
 
         //Broadcast when a user connects
