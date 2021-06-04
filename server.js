@@ -837,7 +837,6 @@ io.on("connection", (socket) => {
             message: formatMessage(botName, "Welcome to NegoFlict!"),
         }); //for personal
 
-        if (user.room === "forum") {
             const history = [];
 
             connection.query(
@@ -862,7 +861,7 @@ io.on("connection", (socket) => {
                     });
                 }
             );
-        }
+        
 
         //Broadcast when a user connects
         socket.broadcast.to(user.room).emit("message", {
