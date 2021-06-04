@@ -952,7 +952,8 @@ io.on("connection", (socket) => {
 
         if (
             msg.includes("fuck") === true ||
-            msg.includes("dont") === true ||
+            msg.includes("hate") === true ||
+            msg.includes("?????") === true ||
             msg.includes("hate") === true ||
             msg.includes("angry") === true ||
             msg.includes("shut up") === true
