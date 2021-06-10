@@ -41,10 +41,10 @@
           var xhr = new XMLHttpRequest();
           xhr.open("POST", yourUrl, true);
           xhr.setRequestHeader('Content-Type', 'application/json');
-          xhr.send(JSON.stringify(object)).then((res)=>{
-            
-          });
-          alert("registered correct");
+          xhr.send(JSON.stringify(object));
+                      
+
+         alert("registered correct");
 
         }
         </script>
@@ -131,7 +131,7 @@
           <input type="text" placeholder="Enter your professional experience..." name="ProfessionalDescription" id="ProfessionalDescription" required><br>
         </div>
       
-      <div class="bottom_part"><a hrf="index.html">
+        <div class="bottom_part"><a href="index.html">
           <button type="submit" onclick="submit()" class="btn">Register</button></a>
         
       </div>
