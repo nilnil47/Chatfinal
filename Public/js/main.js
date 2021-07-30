@@ -22,7 +22,7 @@ const room = negoid;
 
 //console.log(username,room); #check that it works
 
-const socket = io();
+let socket = io();
 
 //console.log(username,room); //print to the right web
 //join chatroom

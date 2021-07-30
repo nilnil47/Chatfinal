@@ -11,7 +11,7 @@ const path = require("path");
 const http = require("http");
 const url = require("url");
 const express = require("express");
-const socketio = require("socket.io");
+const socketio = require("socket.io")
 var nodemailer = require("nodemailer");
 const formatMessage = require("./utils/messages");
 const {
@@ -36,12 +36,12 @@ app.use(bodyParser.json({ limit: "50mb", extended: true }));
 app.use(cookieParse());
 
 // use mysql
-var mysql = require("mysql");
+var mysql = require("mysql2");
 const { response, json } = require("express");
 const { hostname } = require("os");
 //create connection
 try {
-    var connection = mysql.createConnection({
+    var connection = mysql.createPool({
         host: process.env.HOST,
         user: process.env.USER,
         password: process.env.PASSWORD,
@@ -904,6 +904,8 @@ io.on("connection", (socket) => {
     //listen for chatMsg
     socket.on("chatMessage", ({ msg, privateMsgTo }) => {
         const user = getCurrentUser(socket.id);
+
+        // must be called when the user has already had room
         var users = getRoomUsers(user.room);
         console.log(
             "🚀 ~ file: server.js ~ line 451 ~ socket.on ~ privateMsgTo",
@@ -1026,4 +1028,5 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 3000;
 
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));
+console.log("dsaadssad");
