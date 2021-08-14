@@ -135,6 +135,9 @@ chatForm.addEventListener("submit", (e) => {
     );
 
     //emit message to server to the board
+    console.log(`message testing: ${{msg, privateMsgTo}}`);
+    var jsonn =  {msg, privateMsgTo}
+    console.log(JSON.stringify(jsonn))
     socket.emit("chatMessage", { msg, privateMsgTo });
 
     //clear input

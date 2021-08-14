@@ -7,22 +7,27 @@ if (!process.env.PRODUCTION) {
     }
 }
 
+
+const CHAT_ERROR = "chatError";
+
 const path = require("path");
 const http = require("http");
-const url = require("url");
 const express = require("express");
 const socketio = require("socket.io")
 var nodemailer = require("nodemailer");
 const formatMessage = require("./utils/messages");
+
+
 const {
     userJoin,
     getCurrentUser,
     userLeave,
     getRoomUsers,
 } = require("./utils/users");
+
+
 var cors = require("cors");
 let bodyParser = require("body-parser");
-const bcrypt = require("bcrypt");
 const cookieParse = require("cookie-parser");
 
 const app = express();
@@ -30,16 +35,18 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 const router = express.Router();
+
 app.use(cors());
 app.set("trust proxy", true);
-app.use(bodyParser.json({ limit: "50mb", extended: true }));
+app.use(bodyParser.json({limit: "50mb", extended: true}));
 app.use(cookieParse());
 
 // use mysql
 var mysql = require("mysql2");
-const { response, json } = require("express");
-const { hostname } = require("os");
-//create connection
+const {response, json} = require("express");
+const {hostname} = require("os");
+
+// create db connection
 try {
     var connection = mysql.createPool({
         host: process.env.HOST,
@@ -55,20 +62,27 @@ try {
 } catch (err) {
     console.log(err);
 }
-//set static folderמפצ
+
+
+//set static folder (only for client also)
 app.use(express.static(path.join(__dirname, "Public")));
 
+// add all the routes to api /api
 app.use("/api", router);
+
+// fixme: remove this
 router.get("/users", (req, res) => {
     console.log("i been here");
     res.send("hello world get method");
 });
 
+//
 router.post("/usersnego", (req, res) => {
     connection.query(
-        `INSERT INTO user (firstName,lastName,email,username,phone,userType,password) VALUES
- ('${req.body.firstName}','${req.body.lastName}','${req.body.email}','${req.body.username}','${req.body.phone}','${req.body.userType}','${req.body.password}')`,
-        function (error, result) {}
+        `INSERT INTO user (firstName, lastName, email, username, phone, userType, password)
+         VALUES ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${req.body.username}', '${req.body.phone}', '${req.body.userType}', '${req.body.password}')`,
+        function (error, result) {
+        }
     );
 
     res.send("hello world Post method");
@@ -76,33 +90,45 @@ router.post("/usersnego", (req, res) => {
 
 router.post("/usersmedi", (req, res) => {
     connection.query(
-        `INSERT INTO user (firstName,lastName,email,username,phone,education,userType,password,proffesionalExperience) VALUES
- ('${req.body.firstName}','${req.body.lastName}','${req.body.email}','${req.body.username}','${req.body.phone}','${req.body.education}','${req.body.userType}','${req.body.password}','${req.body.proffesionalExperience}')`,
-        function (error, result) {}
+        `INSERT INTO user (firstName, lastName, email, username, phone, education, userType, password,
+                           proffesionalExperience)
+         VALUES ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${req.body.username}',
+                 '${req.body.phone}', '${req.body.education}', '${req.body.userType}', '${req.body.password}',
+                 '${req.body.proffesionalExperience}')`,
+        function (error, result) {
+        }
     );
 });
 
 router.post("/resetpass", (req, res) => {
     connection.query(
-        `UPDATE user SET password=
-('${req.body.password}') WHERE username=?`,
+        `UPDATE user
+         SET password=
+                 ('${req.body.password}')
+         WHERE username = ?`,
         [req.body.username],
-        function (error, result) {}
+        function (error, result) {
+        }
     );
 });
 
 router.get("/viewnegos/:username", (req, res) => {
-    const { username } = req.params;
+    const {username} = req.params;
     connection.query(
-        `SELECT userCode FROM user WHERE username=?`,
+        `SELECT userCode
+         FROM user
+         WHERE username = ?`,
         [username],
         function (error, result) {
             var id = result[0].userCode;
             //fix to find number two
             console.log(id);
             connection.query(
-                `SELECT negoid, title FROM negotiation WHERE (mediatoerCode=? OR userCode1=? OR userCode2=?)
-                AND endTime IS NULL AND negoid!=100`,
+                `SELECT negoid, title
+                 FROM negotiation
+                 WHERE (mediatoerCode = ? OR userCode1 = ? OR userCode2 = ?)
+                   AND endTime IS NULL
+                   AND negoid!=100`,
                 [id, id, id],
                 function (err, resl, fields) {
                     if (err) throw err;
@@ -114,10 +140,12 @@ router.get("/viewnegos/:username", (req, res) => {
 });
 
 router.get("/getnot/:username", (req, res) => {
-    const { username } = req.params;
+    const {username} = req.params;
 
     connection.query(
-        `SELECT userCode FROM user WHERE username=?`,
+        `SELECT userCode
+         FROM user
+         WHERE username = ?`,
         [username],
         function (error, result) {
             var id = result[0].userCode;
@@ -125,7 +153,10 @@ router.get("/getnot/:username", (req, res) => {
             //fix to find number two
 
             connection.query(
-                `SELECT id, conent FROM notifications WHERE readen='0' AND userCode=?  `,
+                `SELECT id, conent
+                 FROM notifications
+                 WHERE readen = '0'
+                   AND userCode = ?  `,
                 [id],
                 function (err, resl, fields) {
                     if (err) throw err;
@@ -166,15 +197,18 @@ router.post("/sendnotifaiction", (req, res) => {
     console.log(req.body.notification);
 
     connection.query(
-        `SELECT userCode FROM user WHERE username=?`,
+        `SELECT userCode
+         FROM user
+         WHERE username = ?`,
         [req.body.username],
         function (error, result) {
             //put if user not kaim
             connection.query(
-                `INSERT INTO notifications (conent,UserCode) VALUES
- ('${req.body.notification}','${result[0].userCode}')`,
+                `INSERT INTO notifications (conent, UserCode)
+                 VALUES ('${req.body.notification}', '${result[0].userCode}')`,
 
-                function (error, result) {}
+                function (error, result) {
+                }
             );
         }
     );
@@ -183,7 +217,9 @@ router.post("/sendnotifaiction", (req, res) => {
     //  ('${req.body.firstName}','${req.body.lastName}','${req.body.email}','${req.body.username}','${req.body.phone}','${req.body.userType}','${req.body.password}')`
 
     connection.query(
-        `SELECT email FROM user WHERE username=?`,
+        `SELECT email
+         FROM user
+         WHERE username = ?`,
         [req.body.username],
         function (error, resi) {
             var transporter = nodemailer.createTransport({
@@ -240,7 +276,9 @@ router.post("/resetpassword", (req, res) => {
 
 router.post("/notification", (req, res) => {
     connection.query(
-        `SELECT email FROM user WHERE username=? `,
+        `SELECT email
+         FROM user
+         WHERE username = ? `,
         [req.body.username],
         function (error, result) {
             if (error) {
@@ -315,7 +353,11 @@ router.post("/login", (req, res) => {
 
 router.get("/unapprovedMed", (req, res) => {
     connection.query(
-        `SELECT firstName,lastName,username,education,proffesionalExperience FROM user WHERE approved=? AND userType=? AND userCode!=?`,
+        `SELECT firstName, lastName, username, education, proffesionalExperience
+         FROM user
+         WHERE approved = ?
+           AND userType = ?
+           AND userCode!=?`,
         [0, "mediator", 100],
         function (error, result) {
             console.log(JSON.stringify(result));
@@ -326,7 +368,10 @@ router.get("/unapprovedMed", (req, res) => {
 
 router.get("/query1", (req, res) => {
     connection.query(
-        `SELECT firstName,lastName,username, userType, phone ,education,proffesionalExperience FROM user WHERE userType!=? AND userCode!=? ORDER BY 4,2`,
+        `SELECT firstName, lastName, username, userType, phone, education, proffesionalExperience
+         FROM user
+         WHERE userType!=? AND userCode!=?
+         ORDER BY 4, 2`,
         ["manager", 100],
         function (error, result) {
             console.log(JSON.stringify(result));
@@ -337,14 +382,16 @@ router.get("/query1", (req, res) => {
 
 router.get("/query2", (req, res) => {
     connection.query(
-        `SELECT  userCode ,firstName , lastName , userType , COUNT(*) AS Num
-         FROM user, negotiation
-         WHERE user.userCode = negotiation.userCode1 
-         OR user.userCode = negotiation.userCode2
-         OR user.userCode = negotiation.mediatoerCode 
-         AND userType!=? AND userCode!=?
-         GROUP BY  user.userCode
-         `,
+        `SELECT userCode, firstName, lastName, userType, COUNT(*) AS Num
+         FROM user,
+              negotiation
+         WHERE user.userCode = negotiation.userCode1
+            OR user.userCode = negotiation.userCode2
+            OR user.userCode = negotiation.mediatoerCode
+             AND userType
+             !=? AND userCode!=?
+         GROUP BY user.userCode
+        `,
         ["manager", 100],
         function (error, result) {
             console.log(JSON.stringify(result));
@@ -355,11 +402,12 @@ router.get("/query2", (req, res) => {
 
 router.get("/query3", (req, res) => {
     connection.query(
-        `SELECT  negotiation.negoid,title, COUNT(*) AS Num
-         FROM message, negotiation
-         WHERE message.negoid = negotiation.negoid 
-         GROUP BY  negotiation.negoid
-         `,
+        `SELECT negotiation.negoid, title, COUNT(*) AS Num
+         FROM message,
+              negotiation
+         WHERE message.negoid = negotiation.negoid
+         GROUP BY negotiation.negoid
+        `,
         function (error, result) {
             console.log(JSON.stringify(result));
             res.send(result);
@@ -369,7 +417,7 @@ router.get("/query3", (req, res) => {
 
 router.get("/query4", (req, res) => {
     connection.query(
-        `SELECT  negoid, title, description, startTime, userCode1, userCode2, mediatoerCode
+        `SELECT negoid, title, description, startTime, userCode1, userCode2, mediatoerCode
          FROM negotiation
          WHERE endTime IS NULL
          ORDER BY startTime`,
@@ -382,7 +430,7 @@ router.get("/query4", (req, res) => {
 
 router.get("/query5", (req, res) => {
     connection.query(
-        `SELECT  negoid, title, description, startTime, endTime
+        `SELECT negoid, title, description, startTime, endTime
          FROM negotiation
          WHERE endTime IS NOT NULL
          ORDER BY startTime`,
@@ -396,9 +444,9 @@ router.get("/query5", (req, res) => {
 router.get("/query6", (req, res) => {
     connection.query(
         `SELECT userType, COUNT(*) AS num
-        FROM user
-        WHERE userCode != ? AND userType!=?
-        GROUP BY  userType;
+         FROM user
+         WHERE userCode != ? AND userType!=?
+         GROUP BY userType;
         `,
         [100, "manager"],
         function (error, result) {
@@ -409,7 +457,7 @@ router.get("/query6", (req, res) => {
 });
 router.get("/query7", (req, res) => {
     connection.query(
-        `SELECT  negoid, title, description, startTime, endTime
+        `SELECT negoid, title, description, startTime, endTime
          FROM negotiation
          WHERE endTime IS NOT NULL
          ORDER BY startTime`,
@@ -421,16 +469,19 @@ router.get("/query7", (req, res) => {
 });
 
 router.get("/query8/:username", (req, res) => {
-    const { username } = req.params;
+    const {username} = req.params;
     connection.query(
-        `SELECT userCode FROM user WHERE username=?`,
+        `SELECT userCode
+         FROM user
+         WHERE username = ?`,
         [username],
         function (error, result) {
             connection.query(
-                `SELECT  mediatoerCode, title, description, endTime, summary
-         FROM negotiation
-         WHERE summary IS NOT NULL AND mediatoerCode=?
-         ORDER BY endTime`,
+                `SELECT mediatoerCode, title, description, endTime, summary
+                 FROM negotiation
+                 WHERE summary IS NOT NULL
+                   AND mediatoerCode = ?
+                 ORDER BY endTime`,
                 [result[0].userCode],
                 function (error, res1) {
                     res.send(res1);
@@ -441,7 +492,7 @@ router.get("/query8/:username", (req, res) => {
 });
 router.get("/query9", (req, res) => {
     connection.query(
-        `SELECT  username, title, content
+        `SELECT username, title, content
          FROM insight`,
         function (error, res1) {
             res.send(res1);
@@ -451,24 +502,30 @@ router.get("/query9", (req, res) => {
 
 router.post("/approvenMed", (req, res) => {
     connection.query(
-        `UPDATE user SET approved='1' WHERE username=?`,
+        `UPDATE user
+         SET approved='1'
+         WHERE username = ?`,
         [req.body.username],
-        function (error, result) {}
+        function (error, result) {
+        }
     );
 });
 
 router.post("/endnego", (req, res) => {
     connection.query(
         `SELECT userType
-        FROM user
-        WHERE username=?`,
+         FROM user
+         WHERE username = ?`,
         [req.body.name],
         function (error, result0) {
             if (result0[0].userType == "mediator") {
                 connection.query(
-                    `UPDATE negotiation SET endTime=current_timestamp() WHERE negoid=?`,
+                    `UPDATE negotiation
+                     SET endTime=current_timestamp()
+                     WHERE negoid = ?`,
                     [req.body.negoid],
-                    function (error, result) {}
+                    function (error, result) {
+                    }
                 );
                 res.send("b");
             } else {
@@ -481,8 +538,8 @@ router.post("/endnego", (req, res) => {
 router.post("/checkinsti", (req, res) => {
     connection.query(
         `SELECT userType
-        FROM user
-        WHERE username=?`,
+         FROM user
+         WHERE username = ?`,
         [req.body.name],
         function (error, result0) {
             if ((result0[0].userType = "mediator")) {
@@ -496,16 +553,24 @@ router.post("/checkinsti", (req, res) => {
 
 router.post("/addsummary", (req, res) => {
     connection.query(
-        `UPDATE negotiation SET summary=? WHERE negoid=?`,
+        `UPDATE negotiation
+         SET summary=?
+         WHERE negoid = ?`,
         [req.body.summary, req.body.negoid],
-        function (error, result) {}
+        function (error, result) {
+        }
     );
     connection.query(
-        `SELECT userCode1, userCode2, title FROM negotiation WHERE negoid=?`,
+        `SELECT userCode1, userCode2, title
+         FROM negotiation
+         WHERE negoid = ?`,
         [req.body.negoid],
         function (err, res1) {
             connection.query(
-                `SELECT email FROM user WHERE userCode=? OR userCode=?`,
+                `SELECT email
+                 FROM user
+                 WHERE userCode = ?
+                    OR userCode = ?`,
                 [res1[0].userCode1, res1[0].userCode2],
                 function (err, res) {
                     console.log(res);
@@ -540,17 +605,22 @@ router.post("/addsummary", (req, res) => {
 
 router.post("/addinsight", (req, res) => {
     connection.query(
-        `SELECT mediatoerCode, title FROM negotiation WHERE negoid=?`,
+        `SELECT mediatoerCode, title
+         FROM negotiation
+         WHERE negoid = ?`,
         [req.body.negoid],
         function (err, res1, fields) {
             connection.query(
-                `SELECT username FROM user WHERE userCode=?`,
+                `SELECT username
+                 FROM user
+                 WHERE userCode = ?`,
                 [res1[0].mediatoerCode],
                 function (err1, res2) {
                     connection.query(
-                        `INSERT INTO insight (username,title,content) VALUES
-            ('${res2[0].username}','${res1[0].title}', '${req.body.insight}')`,
-                        function (error, result) {}
+                        `INSERT INTO insight (username, title, content)
+                         VALUES ('${res2[0].username}', '${res1[0].title}', '${req.body.insight}')`,
+                        function (error, result) {
+                        }
                     );
                 }
             );
@@ -560,21 +630,30 @@ router.post("/addinsight", (req, res) => {
 
 router.post("/assignmedi", (req, res) => {
     connection.query(
-        `SELECT userCode, email,phone FROM user WHERE username=?`,
+        `SELECT userCode, email, phone
+         FROM user
+         WHERE username = ?`,
         [req.body.username],
         function (error, result0) {
             connection.query(
-                `UPDATE negotiation SET mediatoerCode=('${result0[0].userCode}') WHERE negoid=?`,
+                `UPDATE negotiation
+                 SET mediatoerCode=('${result0[0].userCode}')
+                 WHERE negoid = ?`,
                 [req.body.negoid],
 
                 function (error, result) {
                     connection.query(
-                        `SELECT userCode1,userCode2,description FROM negotiation WHERE negoid=?`,
+                        `SELECT userCode1, userCode2, description
+                         FROM negotiation
+                         WHERE negoid = ?`,
                         [req.body.negoid],
 
                         function (error, res2) {
                             connection.query(
-                                `SELECT username, email, phone FROM user WHERE userCode=? OR userCode=?`,
+                                `SELECT username, email, phone
+                                 FROM user
+                                 WHERE userCode = ?
+                                    OR userCode = ?`,
                                 [res2[0].userCode1, res2[0].userCode2],
 
                                 function (error, res3) {
@@ -605,7 +684,7 @@ router.post("/assignmedi", (req, res) => {
                                             } else {
                                                 console.log(
                                                     "Email sent: " +
-                                                        info.response
+                                                    info.response
                                                 );
                                             }
                                         }
@@ -636,7 +715,7 @@ router.post("/assignmedi", (req, res) => {
                                             } else {
                                                 console.log(
                                                     "Email sent: " +
-                                                        info.response
+                                                    info.response
                                                 );
                                             }
                                         }
@@ -653,15 +732,20 @@ router.post("/assignmedi", (req, res) => {
 
 router.post("/read", (req, res) => {
     connection.query(
-        `UPDATE notifications SET readen='1' WHERE id=?`,
+        `UPDATE notifications
+         SET readen='1'
+         WHERE id = ?`,
         [req.body.id],
-        function (error, result) {}
+        function (error, result) {
+        }
     );
 });
 
 router.get("/viewnegitaion", (req, res) => {
     connection.query(
-        `SELECT negoid, title, description FROM negotiation WHERE mediatoerCode=?`,
+        `SELECT negoid, title, description
+         FROM negotiation
+         WHERE mediatoerCode = ?`,
         [100],
         function (error, result) {
             //console.log(JSON.stringify(result));
@@ -675,7 +759,10 @@ router.get("/approvedMed", (req, res) => {
     var num = 1;
     var k = "mediator";
     connection.query(
-        `SELECT username FROM user WHERE approved=? AND userType=?`,
+        `SELECT username
+         FROM user
+         WHERE approved = ?
+           AND userType = ?`,
         [num, k],
         function (error, result) {
             //console.log(JSON.stringify(result));
@@ -721,9 +808,10 @@ router.post("/newnegotiation", (req, res) => {
                     }
 
                     connection.query(
-                        `INSERT INTO negotiation (usercode1,usercode2,title,description) VALUES
-        ('${id1}','${id2}','${req.body.title}','${req.body.description}')`,
-                        function (error, result) {}
+                        `INSERT INTO negotiation (usercode1, usercode2, title, description)
+                         VALUES ('${id1}', '${id2}', '${req.body.title}', '${req.body.description}')`,
+                        function (error, result) {
+                        }
                     );
                 }
             );
@@ -742,8 +830,8 @@ router.post("/newnegotiationmedi", (req, res) => {
                 [req.body.phone_user1, req.body.phone_user2],
                 function (err, res) {
                     connection.query(
-                        `INSERT INTO negotiation (usercode1,usercode2,mediatoerCode,title, description) VALUES
-        ('${res[0].userCode}','${res[1].userCode}','${results[0].userCode}','${req.body.title}','${req.body.description}')`,
+                        `INSERT INTO negotiation (usercode1, usercode2, mediatoerCode, title, description)
+                         VALUES ('${res[0].userCode}', '${res[1].userCode}', '${results[0].userCode}', '${req.body.title}', '${req.body.description}')`,
                         function (error, result) {
                             var transporter = nodemailer.createTransport({
                                 service: "gmail",
@@ -814,7 +902,7 @@ const botName = "Nego Bot";
 
 //Run when client connect
 io.on("connection", (socket) => {
-    
+
     var onevent = socket.onevent;
     socket.onevent = function (packet) {
         var args = packet.data || [];
@@ -827,74 +915,99 @@ io.on("connection", (socket) => {
         console.log(data);
     });
 
-    socket.on("joinRoom", ({ username, room }) => {
-        const user = userJoin(socket.id, username, room);
-        socket.join(user.room);
+    socket.on("joinRoom", ({username, room}) => {
+        try {
 
-        //welcome current user
-        socket.emit("message", {
-            users: getRoomUsers(user.room),
-            message: formatMessage(botName, "Welcome to NegoFlict!"),
-        }); //for personal
+            const user = userJoin(socket.id, username, room);
+            socket.join(user.room);
+
+            //welcome current user
+            socket.emit("message", {
+                users: getRoomUsers(user.room),
+                message: formatMessage(botName, "Welcome to NegoFlict!"),
+            }); //for personal
 
             const history = [];
-            connection.query(`SELECT negoid FROM negotiation WHERE title=?`,
-            [user.room],function(err,res){
+            connection.query(`SELECT negoid
+                              FROM negotiation
+                              WHERE title = ?`,
+                [user.room], function (err, res) {
 
-            connection.query(
-                            `SELECT content,userCode FROM message WHERE negoid=?`,
-                            [res[0].negoid],
-                            function (err, res1) {
-                                res1.forEach((msg) => {
-                                    connection.query(
-                                        `SELECT username FROM user WHERE userCode=?`,
-                                        [msg.userCode],
-                                        function (err, res2) {
-                                            console.log(msg);
-                                            socket.emit("message", msg.content);
-                                            io.to(user.room).emit("message", {
-                                                message: formatMessage(
-                                                    res2[0].username,
-                                                    msg.content
-                                                ),
-                                            });
-                                        }
-                                    );
-                                });
-                            }
-                        );}
+                    connection.query(
+                        `SELECT content, userCode
+                         FROM message
+                         WHERE negoid = ?`,
+                        [res[0].negoid],
+                        function (err, res1) {
+                            res1.forEach((msg) => {
+                                connection.query(
+                                    `SELECT username
+                                     FROM user
+                                     WHERE userCode = ?`,
+                                    [msg.userCode],
+                                    function (err, res2) {
+                                        console.log(msg);
+                                        socket.emit("message", msg.content);
+                                        io.to(user.room).emit("message", {
+                                            message: formatMessage(
+                                                res2[0].username,
+                                                msg.content
+                                            ),
+                                        });
+                                    }
+                                );
+                            });
+                        }
+                    );
+                }
             );
-            
-        
 
-        //Broadcast when a user connects
-        socket.broadcast.to(user.room).emit("message", {
-            users: getRoomUsers(user.room),
-            message: formatMessage(
-                botName,
-                `${user.username} has joined the chat`
-            ),
-        });
+
+            //Broadcast when a user connects
+            socket.broadcast.to(user.room).emit("message", {
+                users: getRoomUsers(user.room),
+                message: formatMessage(
+                    botName,
+                    `${user.username} has joined the chat`
+                ),
+            });
+
+
+            io.to(user.room).emit("roomUsers", {
+                room: user.room,
+                users: getRoomUsers(user.room),
+            });
+
+        } catch (e) {
+
+        }
+
+        // validate that the room is defined
+        // return false if room is not defined and the function need
+        // to exit
+        function validateRoom() {
+            if (user.room === undefined) {
+                socket.emit(CHAT_ERROR, {"data": "room is not defined"});
+                return false
+            }
+            return true
+        }
 
         //send users and room info
-        io.to(user.room).emit("roomUsers", {
-            room: user.room,
-            users: getRoomUsers(user.room),
-        });
 
         ///ISTYPING SOCKETS
         socket.on("startTyping", function () {
             console.log("isTyping", user.room);
             socket.broadcast
                 .to(user.room)
-                .emit("isTyping", { user, typing: true });
+                .emit("isTyping", {user, typing: true});
         });
 
         socket.on("stopTyiping", function () {
             console.log("isNotTyping", user.room);
             socket.broadcast
                 .to(user.room)
-                .emit("isNotTyping", { user, typing: false });
+                .emit("isNotTyping", {user, typing: false});
         });
     });
     // console.log('New Ws connection...');  //when we reload the page we have msg on the traminal that new ws is created
@@ -902,87 +1015,99 @@ io.on("connection", (socket) => {
     //problem with the rooms
 
     //listen for chatMsg
-    socket.on("chatMessage", ({ msg, privateMsgTo }) => {
-        const user = getCurrentUser(socket.id);
+    socket.on("chatMessage", ({msg, privateMsgTo}) => {
 
-        // must be called when the user has already had room
-        var users = getRoomUsers(user.room);
-        console.log(
-            "🚀 ~ file: server.js ~ line 451 ~ socket.on ~ privateMsgTo",
-            typeof privateMsgTo,
-            user,
-            users
-        );
-        //david sends to baros
-        if (privateMsgTo != "null") {
-            // the recipient
-            const recipient = users.find((u) => u.id === privateMsgTo);
-            io.to(privateMsgTo).emit("privateMsgTo", {
-                msg: formatMessage(user.username, msg),
-                isSender: false,
+        try {
+
+            const user = getCurrentUser(socket.id);
+
+            // must be called when the user has already had room
+            var users = getRoomUsers(user.room);
+            console.log(
+                "🚀 ~ file: server.js ~ line 451 ~ socket.on ~ privateMsgTo",
+                typeof privateMsgTo,
                 user,
-            });
-            // the sender
-            io.to(user.id).emit("privateMsgTo", {
-                msg: formatMessage(user.username, msg),
-                isSender: true,
-                user: recipient,
-            });
-        } else {
-            if (!user.room) return console.error(user, "no room?");
-            io.to(user.room).emit("message", {
-                message: formatMessage(user.username, msg),
-            }); //print everyone
-        }
-
-        //save the msg in database
-        connection.query(
-            `SELECT userCode FROM user WHERE username=?`,
-            [user.username],
-            function (err, res) {
-                connection.query(
-                    `SELECT negoid FROM negotiation WHERE title=?`,
-                    [user.room],
-                    function (err, res1) {
-                        console.log(res[0].userCode, res1[0].negoid);
-                        connection.query(
-                            `INSERT INTO message (content, userCode,negoid) VALUES ('${msg}','${res[0].userCode}','${res1[0].negoid}')`,
-                            function (error, result) {}
-                        );
-                    }
-                );
+                users
+            );
+            //david sends to baros
+            if (privateMsgTo != "null") {
+                // the recipient
+                const recipient = users.find((u) => u.id === privateMsgTo);
+                io.to(privateMsgTo).emit("privateMsgTo", {
+                    msg: formatMessage(user.username, msg),
+                    isSender: false,
+                    user,
+                });
+                // the sender
+                io.to(user.id).emit("privateMsgTo", {
+                    msg: formatMessage(user.username, msg),
+                    isSender: true,
+                    user: recipient,
+                });
+            } else {
+                if (!user.room) return console.error(user, "no room?");
+                io.to(user.room).emit("message", {
+                    message: formatMessage(user.username, msg),
+                }); //print everyone
             }
-        );
-        word = ["fuck", "no", "dont", "hate", "angry", "!!!", "..."];
 
-        if (
-            msg.includes("fuck") === true ||
-            msg.includes("hate") === true ||
-            msg.includes("?????") === true ||
-            msg.includes("hate") === true ||
-            msg.includes("angry") === true ||
-            msg.includes("shut up") === true
-        ) {
-            io.to(user.id).emit("message", {
-                users: getRoomUsers(user.room),
-                message: formatMessage(
-                    botName,
-                    `Hi ${user.username}, you look a little bit angry.For the success of the negotiation , please try to stay calm`
-                ),
-            });
-            //     console.log(user.id);
-            //     connection.query(`SELECT mediatoerCode FROM negotiation WHERE title=?`,
-            //     [user.room],function(err,res1){
-            //         connection.query(`SELECT username FROM user WHERE userCode=?`,
-            // [res1[0].mediatoerCode],function(err,res){
-            //     io.to(res1[0].mediatoerCode)
-            //     .emit("message", {
-            //         users: getRoomUsers(user.room),
-            //         message:formatMessage(botName, `Hi ${user.username}, look little angry. for the negotiation will succed i hope you relax`)
+            //save the msg in database
+            connection.query(
+                `SELECT userCode
+                 FROM user
+                 WHERE username = ?`,
+                [user.username],
+                function (err, res) {
+                    connection.query(
+                        `SELECT negoid
+                         FROM negotiation
+                         WHERE title = ?`,
+                        [user.room],
+                        function (err, res1) {
+                            console.log(res[0].userCode, res1[0].negoid);
+                            connection.query(
+                                `INSERT INTO message (content, userCode, negoid)
+                                 VALUES ('${msg}', '${res[0].userCode}', '${res1[0].negoid}')`,
+                                function (error, result) {
+                                }
+                            );
+                        }
+                    );
+                }
+            );
+            word = ["fuck", "no", "dont", "hate", "angry", "!!!", "..."];
 
-            //     });
-            // });
-            //     });
+            if (
+                msg.includes("fuck") === true ||
+                msg.includes("hate") === true ||
+                msg.includes("?????") === true ||
+                msg.includes("hate") === true ||
+                msg.includes("angry") === true ||
+                msg.includes("shut up") === true
+            ) {
+                io.to(user.id).emit("message", {
+                    users: getRoomUsers(user.room),
+                    message: formatMessage(
+                        botName,
+                        `Hi ${user.username}, you look a little bit angry.For the success of the negotiation , please try to stay calm`
+                    ),
+                });
+                //     console.log(user.id);
+                //     connection.query(`SELECT mediatoerCode FROM negotiation WHERE title=?`,
+                //     [user.room],function(err,res1){
+                //         connection.query(`SELECT username FROM user WHERE userCode=?`,
+                // [res1[0].mediatoerCode],function(err,res){
+                //     io.to(res1[0].mediatoerCode)
+                //     .emit("message", {
+                //         users: getRoomUsers(user.room),
+                //         message:formatMessage(botName, `Hi ${user.username}, look little angry. for the negotiation will succed i hope you relax`)
+
+                //     });
+                // });
+                //     });
+            }
+        } catch (e) {
+
         }
     });
 
@@ -990,10 +1115,10 @@ io.on("connection", (socket) => {
     socket.on("pageLoaded", () => {
         const user = getCurrentUser(socket.id);
 
-        io.to(user.room).emit("pageLoad", { users: getRoomUsers(user.room) }); //print everyone
+        io.to(user.room).emit("pageLoad", {users: getRoomUsers(user.room)}); //print everyone
     });
 
-    socket.on("userLeft", ({ username, room }) => {
+    socket.on("userLeft", ({username, room}) => {
         const user = userLeave(socket.id);
         if (user) {
             io.to(user.room).emit("message", {
